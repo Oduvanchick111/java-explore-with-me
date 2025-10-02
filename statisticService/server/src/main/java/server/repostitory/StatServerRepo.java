@@ -13,7 +13,7 @@ import java.util.List;
 @Repository
 public interface StatServerRepo extends JpaRepository<EndpointHit, Long> {
 
-    @Query("SELECT new statisticService.dto.ViewStatsDto(eh.app, eh.uri, COUNT(eh.ip)) " +
+    @Query("SELECT new dto.ViewStatsDto(eh.app, eh.uri, COUNT(eh.ip)) " +  // ← dto.ViewStatsDto
             "FROM EndpointHit AS eh " +
             "WHERE eh.timestamp BETWEEN :start AND :end " +
             "AND (:uris IS NULL OR eh.uri IN :uris) " +
@@ -23,7 +23,7 @@ public interface StatServerRepo extends JpaRepository<EndpointHit, Long> {
                                 @Param("end") LocalDateTime end,
                                 @Param("uris") List<String> uris);
 
-    @Query("SELECT new statisticService.dto.ViewStatsDto(eh.app, eh.uri, COUNT(DISTINCT eh.ip)) " +
+    @Query("SELECT new dto.ViewStatsDto(eh.app, eh.uri, COUNT(DISTINCT eh.ip)) " +  // ← dto.ViewStatsDto
             "FROM EndpointHit eh " +
             "WHERE eh.timestamp BETWEEN :start AND :end " +
             "AND (:uris IS NULL OR eh.uri IN :uris) " +
