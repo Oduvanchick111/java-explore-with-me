@@ -27,8 +27,8 @@ public class EndpointHitMapper {
     }
 
     public EndpointHitResponseDto toEndpointHitResponseDto(EndpointHit endpointHit) {
-        return EndpointHitResponseDto.builder().
-                app(endpointHit.getApp())
+        return EndpointHitResponseDto.builder()
+                .app(endpointHit.getApp())
                 .uri(endpointHit.getUri())
                 .ip(endpointHit.getIp())
                 .timestamp(endpointHit.getTimestamp())
