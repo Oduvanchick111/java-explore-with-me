@@ -26,7 +26,7 @@ public class EndpointHitMapper {
                 .build();
     }
 
-    public EndpointHitResponseDto toEndpointHitResponseDto (EndpointHit endpointHit) {
+    public EndpointHitResponseDto toEndpointHitResponseDto(EndpointHit endpointHit) {
         return EndpointHitResponseDto.builder().
                 app(endpointHit.getApp())
                 .uri(endpointHit.getUri())
