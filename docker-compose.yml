@@ -12,6 +12,13 @@ services:
       - SPRING_DATASOURCE_USERNAME=stat
       - SPRING_DATASOURCE_PASSWORD=stat
 
+  ewm-service:
+    build: mainService
+    image: ewm-service
+    container_name: ewm-service
+    ports:
+      - "8080:8080"
+
   stat-db:
     image: postgres:16.1
     container_name: stat-db
