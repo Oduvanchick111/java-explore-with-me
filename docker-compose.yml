@@ -7,10 +7,6 @@ services:
       - "9090:9090"
     depends_on:
       - stat-db
-    environment:
-      - SPRING_DATASOURCE_URL=jdbc:postgresql://stat-db:5432/stat
-      - SPRING_DATASOURCE_USERNAME=stat
-      - SPRING_DATASOURCE_PASSWORD=stat
     healthcheck:
           test: [ "CMD", "curl", "-f", "http://localhost:9090/actuator/health" ]
           interval: 30s
