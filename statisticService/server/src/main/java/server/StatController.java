@@ -18,7 +18,6 @@ import static dto.ForDate.DATE_TIME_FORMAT;
 @RestController
 @RequiredArgsConstructor
 @Slf4j
-@SuppressWarnings("unused")
 public class StatController {
     private final StatService statService;
 
@@ -31,7 +30,6 @@ public class StatController {
     }
 
     @GetMapping("/stats")
-    @ResponseStatus(HttpStatus.OK)
     public List<ViewStatsDto> getStats(@RequestParam(name = "start", required = true)
                                        @DateTimeFormat(pattern = DATE_TIME_FORMAT)
                                        LocalDateTime start,
