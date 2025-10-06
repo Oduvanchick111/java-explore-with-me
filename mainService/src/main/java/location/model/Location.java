@@ -14,6 +14,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Table(name = "location")
 public class Location {
+    private Long id;
     private Double lat;
     private Double lon;
 }
