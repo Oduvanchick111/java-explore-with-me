@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS users (
   id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
   name VARCHAR(200) NOT NULL,
-  email VARCHAR(200) NOT NULL UNIQUE
+  email VARCHAR(200) NOT NULL UNIQUE,
   role VARCHAR(50) NOT NULL DEFAULT 'USER'
 );
 
@@ -16,19 +16,12 @@ CREATE TABLE IF NOT EXISTS compilations (
     pinned boolean NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS location (
-    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    lat NUMERIC NOT NULL,
-    lon NUMERIC NOT NULL
-);
-
-CREATE TABLE IF NOT EXISTS event (
+CREATE TABLE IF NOT EXISTS events (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
     annotation TEXT NOT NULL,
     description TEXT,
     category_id BIGINT NOT NULL REFERENCES categories(id),
-    location_id BIGINT NOT NULL REFERENCES location(id),
     initiator_id BIGINT NOT NULL REFERENCES users(id),
     event_date TIMESTAMP NOT NULL,
     paid BOOLEAN NOT NULL DEFAULT FALSE,
@@ -51,7 +44,7 @@ CREATE TABLE IF NOT EXISTS participation_request (
 
 CREATE TABLE IF NOT EXISTS compilation_events (
     compilation_id BIGINT NOT NULL REFERENCES compilations(id),
-    event_id BIGINT NOT NULL REFERENCES event(id),
+    event_id BIGINT NOT NULL REFERENCES events(id),
     PRIMARY KEY (compilation_id, event_id)
 );
 
