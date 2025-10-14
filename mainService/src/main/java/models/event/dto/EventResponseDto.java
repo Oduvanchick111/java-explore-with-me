@@ -58,5 +58,5 @@ public class EventResponseDto {
 
     private boolean paid;
 
-    private Integer views;
+    private Long views;
 }

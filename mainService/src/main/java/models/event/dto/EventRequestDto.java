@@ -55,6 +55,6 @@ public class EventRequestDto {
 
     private boolean paid;
 
-    private Integer views;
+    private Long views;
 }
 

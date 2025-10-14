@@ -44,5 +44,5 @@ public class EventShortResponseDto {
 
     private Boolean paid;
 
-    private Integer views;
+    private Long views;
 }

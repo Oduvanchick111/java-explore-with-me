@@ -60,7 +60,7 @@ public class Event {
     private LocalDateTime publishedOn;
 
     @Column(name = "views")
-    private int views;
+    private Long views;
 
     @Column(name = "confirmed_requests")
     private Long confirmedRequests;

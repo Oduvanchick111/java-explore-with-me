@@ -16,8 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@SuppressWarnings("unused")
-public class StatsClient {
+public class StatsClient implements ClientBase{
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
