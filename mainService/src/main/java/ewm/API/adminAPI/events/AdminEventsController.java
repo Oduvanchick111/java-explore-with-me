@@ -17,13 +17,13 @@ public class AdminEventsController {
     private final AdminEventsService adminEventsService;
 
     @GetMapping
-    List<EventResponseDto> getEventsByAdmin(@RequestParam (required = false) List<Long> users,
-                                            @RequestParam (required = false) List<String> states,
-                                            @RequestParam (required = false) List<Long> categories,
-                                            @RequestParam (required = false) LocalDateTime rangeStart,
-                                            @RequestParam (required = false) LocalDateTime rangeEnd,
-                                            @RequestParam (defaultValue = "0") int from,
-                                            @RequestParam (defaultValue = "10") int size) {
+    List<EventResponseDto> getEventsByAdmin(@RequestParam(required = false) List<Long> users,
+                                            @RequestParam(required = false) List<String> states,
+                                            @RequestParam(required = false) List<Long> categories,
+                                            @RequestParam(required = false) LocalDateTime rangeStart,
+                                            @RequestParam(required = false) LocalDateTime rangeEnd,
+                                            @RequestParam(defaultValue = "0") int from,
+                                            @RequestParam(defaultValue = "10") int size) {
         return adminEventsService.getEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);
     }
 

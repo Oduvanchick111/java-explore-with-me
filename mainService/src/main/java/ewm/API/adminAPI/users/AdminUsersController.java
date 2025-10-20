@@ -16,7 +16,7 @@ public class AdminUsersController {
     private final AdminUsersService adminUsersService;
 
     @GetMapping
-    List<UserDto> getUsersByAdmin(@RequestParam List<Long> ids, @RequestParam (defaultValue = "0") int from, @RequestParam (defaultValue = "10")int size) {
+    List<UserDto> getUsersByAdmin(@RequestParam List<Long> ids, @RequestParam(defaultValue = "0") int from, @RequestParam(defaultValue = "10") int size) {
         return adminUsersService.getUsersByAdmin(ids, from, size);
     }
 

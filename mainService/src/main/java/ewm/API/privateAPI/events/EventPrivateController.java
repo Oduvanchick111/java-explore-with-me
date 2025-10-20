@@ -18,7 +18,7 @@ public class EventPrivateController {
     private final EventPrivateService eventPrivateService;
 
     @GetMapping("/{userId}/events")
-    List<EventResponseDto> getEventsByUserId(@PathVariable Long userId, @RequestParam (defaultValue = "0") int from, @RequestParam (defaultValue = "10") int size) {
+    List<EventResponseDto> getEventsByUserId(@PathVariable Long userId, @RequestParam(defaultValue = "0") int from, @RequestParam(defaultValue = "10") int size) {
         return eventPrivateService.getEventsByUserId(userId, from, size);
     }
 

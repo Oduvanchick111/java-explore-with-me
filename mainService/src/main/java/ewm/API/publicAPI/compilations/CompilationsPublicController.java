@@ -1,4 +1,5 @@
 package ewm.API.publicAPI.compilations;
+
 import lombok.RequiredArgsConstructor;
 import ewm.models.compilation.dto.CompilationDto;
 import org.springframework.web.bind.annotation.*;
@@ -13,7 +14,7 @@ public class CompilationsPublicController {
     private final CompilationPublicService compilationPublicService;
 
     @GetMapping
-    public List<CompilationDto> getCompilations(@RequestParam (required = false) Boolean pinned, @RequestParam (defaultValue = "10") int size, @RequestParam (defaultValue = "0") int from) {
+    public List<CompilationDto> getCompilations(@RequestParam(required = false) Boolean pinned, @RequestParam(defaultValue = "10") int size, @RequestParam(defaultValue = "0") int from) {
         return compilationPublicService.getCompilations(pinned, size, from);
     }
 

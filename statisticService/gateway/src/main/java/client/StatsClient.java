@@ -16,7 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-public class StatsClient implements ClientBase{
+public class StatsClient implements ClientBase {
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
