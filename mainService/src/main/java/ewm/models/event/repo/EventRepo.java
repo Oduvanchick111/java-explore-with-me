@@ -24,8 +24,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
               AND (COALESCE(:rangeStart, CURRENT_TIMESTAMP) IS NULL OR e.eventDate >= COALESCE(:rangeStart, CURRENT_TIMESTAMP))
               AND (:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)
               AND (
-                  :onlyAvailable = false OR 
-                  e.participantLimit = 0 OR 
+                  :onlyAvailable = false OR
+                  e.participantLimit = 0 OR
                   e.confirmedRequests < e.participantLimit
               )
             """)

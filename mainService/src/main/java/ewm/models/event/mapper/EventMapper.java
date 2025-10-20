@@ -32,6 +32,7 @@ public class EventMapper {
                 .views(event.getViews())
                 .build();
     }
+
     public Event toEventEntity(EventRequestDto eventRequestDto, Category category, User initiator) {
         return Event.builder()
                 .title(eventRequestDto.getTitle())

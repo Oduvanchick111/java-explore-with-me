@@ -7,7 +7,7 @@ import ewm.models.category.model.Category;
 @UtilityClass
 public class CategoryMapper {
 
-    public Category toCategoryEntity(CategoryDto categoryDto){
+    public Category toCategoryEntity(CategoryDto categoryDto) {
         return Category.builder()
                 .name(categoryDto.getName())
                 .build();

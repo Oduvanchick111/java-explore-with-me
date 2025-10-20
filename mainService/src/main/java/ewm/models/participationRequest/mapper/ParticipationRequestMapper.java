@@ -9,7 +9,7 @@ import ewm.models.user.model.User;
 @UtilityClass
 public class ParticipationRequestMapper {
 
-    public ParticipationRequest toParticipationRequestEntity (ParticipationRequestDto participationRequestDto, User requester, Event event) {
+    public ParticipationRequest toParticipationRequestEntity(ParticipationRequestDto participationRequestDto, User requester, Event event) {
         return ParticipationRequest.builder()
                 .created(participationRequestDto.getCreated())
                 .status(participationRequestDto.getStatus())
@@ -18,7 +18,7 @@ public class ParticipationRequestMapper {
                 .build();
     }
 
-    public ParticipationRequestDto toParticipationRequestDto (ParticipationRequest participationRequest) {
+    public ParticipationRequestDto toParticipationRequestDto(ParticipationRequest participationRequest) {
         return ParticipationRequestDto.builder()
                 .id(participationRequest.getId())
                 .requesterId(participationRequest.getRequester().getId())
