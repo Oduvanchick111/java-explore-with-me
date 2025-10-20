@@ -12,11 +12,11 @@ services:
       - SPRING_DATASOURCE_USERNAME=stat
       - SPRING_DATASOURCE_PASSWORD=stat
     healthcheck:
-          test: [ "CMD", "curl", "-f", "http://localhost:9090/actuator/health" ]
-          interval: 30s
-          timeout: 10s
-          retries: 3
-          start_period: 40s
+      test: [ "CMD", "curl", "-f", "http://localhost:9090/actuator/health" ]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
 
   ewm-service:
     build: mainService
@@ -24,7 +24,12 @@ services:
     container_name: ewm-service
     ports:
       - "8080:8080"
-
+    depends_on:
+      - main-db
+    environment:
+      - SPRING_DATASOURCE_URL=jdbc:postgresql://main-db:5432/main
+      - SPRING_DATASOURCE_USERNAME=main
+      - SPRING_DATASOURCE_PASSWORD=main
 
   stat-db:
     image: postgres:16.1
@@ -36,7 +41,22 @@ services:
       - POSTGRES_USER=stat
       - POSTGRES_DB=stat
     healthcheck:
-      test: pg_isready -q -d $$POSTGRES_DB -U $$POSTGRES_USER
+      test: ["CMD-SHELL", "pg_isready -U stat -d stat"]
+      timeout: 5s
+      interval: 5s
+      retries: 10
+
+  main-db:  # ← ДОЛЖЕН БЫТЬ НА ТОМ ЖЕ УРОВНЕ, ЧТО И stat-db!
+    image: postgres:16.1
+    container_name: main-db
+    ports:
+      - "5433:5432"
+    environment:
+      - POSTGRES_PASSWORD=main
+      - POSTGRES_USER=main
+      - POSTGRES_DB=main
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U main -d main"]
       timeout: 5s
       interval: 5s
       retries: 10
