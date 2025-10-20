@@ -52,7 +52,7 @@ public class EventMapper {
                 .build();
     }
 
-    public EventShortResponseDto toEventShortResponseDto (Event event) {
+    public EventShortResponseDto toEventShortResponseDto(Event event) {
         return EventShortResponseDto.builder()
                 .title(event.getTitle())
                 .annotation(event.getAnnotation())
