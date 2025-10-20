@@ -1,5 +1,6 @@
 package ewm.models.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ewm.models.category.dto.CategoryDto;
 import ewm.models.event.model.EventState;
 import jakarta.validation.constraints.*;
@@ -32,6 +33,7 @@ public class EventResponseDto {
 
     @NotNull
     @PastOrPresent
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
 
     private String description;
@@ -40,6 +42,7 @@ public class EventResponseDto {
 
     @NotNull
     @Future
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
     @NotNull
@@ -48,6 +51,7 @@ public class EventResponseDto {
     private Integer participantLimit;
 
     @FutureOrPresent
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
     private Boolean requestModeration;

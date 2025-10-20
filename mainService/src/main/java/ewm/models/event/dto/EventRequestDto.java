@@ -1,5 +1,6 @@
 package ewm.models.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -38,6 +39,7 @@ public class EventRequestDto {
 
     @NotNull
     @Future
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
     @NotNull
@@ -46,6 +48,7 @@ public class EventRequestDto {
     private Integer participantLimit;
 
     @FutureOrPresent
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
     private Boolean requestModeration;

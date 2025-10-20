@@ -1,5 +1,6 @@
 package ewm.models.event.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import ewm.models.category.dto.CategoryDto;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.NotBlank;
@@ -36,6 +37,7 @@ public class EventShortResponseDto {
 
     @NotNull
     @Future
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
     @NotNull
