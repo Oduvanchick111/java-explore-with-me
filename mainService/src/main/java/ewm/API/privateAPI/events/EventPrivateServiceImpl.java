@@ -123,6 +123,10 @@ public class EventPrivateServiceImpl implements EventPrivateService {
             throw new ConflictException("Нельзя редактировать опубликованное событие");
         }
 
+        if (updateRequest.getParticipantLimit() != null && updateRequest.getParticipantLimit() < 0) {
+            throw new ValidationException("Лимит участников не может быть отрицательным");
+        }
+
         if (!checkDate(updateRequest.getEventDate())) {
             throw new ConflictException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
