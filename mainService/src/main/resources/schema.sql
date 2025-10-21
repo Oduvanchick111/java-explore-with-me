@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS categories (
 
 CREATE TABLE IF NOT EXISTS compilations (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title VARCHAR(200) NOT NULL,
+    title TEXT NOT NULL,
     pinned boolean NOT NULL
 );
 
@@ -39,7 +39,7 @@ CREATE TABLE IF NOT EXISTS events (
 CREATE TABLE IF NOT EXISTS participation_request (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
     created TIMESTAMP NOT NULL,
-    event_id BIGINT NOT NULL REFERENCES event(id),
+    event_id BIGINT NOT NULL REFERENCES events(id),
     requester_id BIGINT NOT NULL REFERENCES users(id),
     status VARCHAR(200) NOT NULL DEFAULT 'PENDING'
 );

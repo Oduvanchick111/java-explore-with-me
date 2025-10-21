@@ -1,5 +1,6 @@
 package ewm.API.adminAPI.compilations;
 
+import ewm.models.apiError.model.ValidateException;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ewm.models.compilation.dto.CompilationCreateDto;
@@ -18,6 +19,9 @@ public class AdminCompilationsController {
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     CompilationDto createCompilation(@RequestBody @Valid CompilationCreateDto compilationDto) {
+        if (compilationDto == null) {
+            throw new ValidateException("Тело запроса не может быть пустым");
+        }
         return adminCompilationsService.createCompilation(compilationDto);
     }
 
