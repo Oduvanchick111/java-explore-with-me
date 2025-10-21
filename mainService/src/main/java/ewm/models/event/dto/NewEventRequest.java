@@ -1,10 +1,7 @@
 package ewm.models.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import jakarta.validation.constraints.Future;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Size;
+import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -19,11 +16,11 @@ import java.time.LocalDateTime;
 public class NewEventRequest {
 
     @NotBlank
-    @Size(min = 3, max = 200)
+    @Size(min = 3, max = 120)
     private String title;
 
     @NotBlank
-    @Size(min = 20, max = 1000)
+    @Size(min = 20, max = 2000)
     private String annotation;
 
     @NotNull
@@ -40,6 +37,7 @@ public class NewEventRequest {
 
     private Boolean paid;
 
+    @Min(value = 0, message = "Лимит участников не может быть отрицательным")
     private Integer participantLimit;
 
     private Boolean requestModeration;

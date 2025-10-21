@@ -1,5 +1,6 @@
 package ewm.API.privateAPI.events;
 
+import ewm.models.apiError.model.ValidateException;
 import ewm.models.event.dto.NewEventRequest;
 import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
@@ -48,6 +49,9 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         Event currentEvent = EventMapper.toEvent(eventRequestDto, currentUser, categoryForCurrentEvent);
         if (!checkDate(currentEvent.getEventDate())) {
             throw new ValidationException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
+        }
+        if (eventRequestDto.getParticipantLimit() != null && eventRequestDto.getParticipantLimit() < 0) {
+            throw new ValidateException( "Лимит участников не может быть отрицательным");
         }
         return EventMapper.toEventResponseDto(currentEvent);
     }

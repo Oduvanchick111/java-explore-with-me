@@ -18,10 +18,10 @@ import java.time.LocalDateTime;
 @Builder
 public class UpdateEventRequest {
 
-    @Size(min = 3, max = 200, message = "Заголовок должен быть от 3 до 200 символов")
+    @Size(min = 3, max = 120, message = "Заголовок должен быть от 3 до 120 символов")
     private String title;
 
-    @Size(min = 20, max = 1000, message = "Аннотация должна быть от 20 до 1000 символов")
+    @Size(min = 20, max = 2000, message = "Аннотация должна быть от 20 до 2000 символов")
     private String annotation;
 
     private Long categoryId;
