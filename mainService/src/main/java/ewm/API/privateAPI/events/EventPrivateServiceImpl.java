@@ -50,9 +50,6 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         if (!checkDate(currentEvent.getEventDate())) {
             throw new ValidationException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
-        if (eventRequestDto.getParticipantLimit() != null && eventRequestDto.getParticipantLimit() < 0) {
-            throw new ValidateException("Лимит участников не может быть отрицательным");
-        }
         Event savedEvent = eventRepo.save(currentEvent);
         return EventMapper.toEventResponseDto(savedEvent);
     }
