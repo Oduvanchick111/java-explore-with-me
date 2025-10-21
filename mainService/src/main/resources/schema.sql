@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS compilations (
 
 CREATE TABLE IF NOT EXISTS events (
     id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
-    title VARCHAR(255) NOT NULL,
+    title TEXT NOT NULL,
     annotation TEXT NOT NULL,
     description TEXT,
     category_id BIGINT NOT NULL REFERENCES categories(id),
