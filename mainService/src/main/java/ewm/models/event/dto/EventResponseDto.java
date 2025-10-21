@@ -3,7 +3,6 @@ package ewm.models.event.dto;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import ewm.models.category.dto.CategoryDto;
 import ewm.models.event.model.EventState;
-import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -35,7 +34,7 @@ public class EventResponseDto {
 
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
-    
+
     private UserShortDto initiator;
 
     private Integer participantLimit;
