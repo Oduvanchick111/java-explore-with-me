@@ -1,8 +1,8 @@
 package ewm.API.privateAPI.events;
 
+import ewm.models.event.dto.NewEventRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
-import ewm.models.event.dto.EventRequestDto;
 import ewm.models.event.dto.EventResponseDto;
 import ewm.models.event.dto.UpdateEventRequest;
 import org.springframework.http.HttpStatus;
@@ -24,7 +24,7 @@ public class EventPrivateController {
 
     @PostMapping("/{userId}/events")
     @ResponseStatus(HttpStatus.CREATED)
-    EventResponseDto createNewEvent(@PathVariable Long userId, @Valid @RequestBody EventRequestDto eventRequestDto) {
+    EventResponseDto createNewEvent(@PathVariable Long userId, @Valid @RequestBody NewEventRequest eventRequestDto) {
         return eventPrivateService.createNewEvent(userId, eventRequestDto);
     }
 

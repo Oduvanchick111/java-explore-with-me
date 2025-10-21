@@ -61,7 +61,7 @@ public class EventPublicServiceImpl implements EventPublicService {
                 paid,
                 rangeStart,
                 rangeEnd,
-                onlyAvailable != null && onlyAvailable,
+                onlyAvailable,
                 pageable
         );
 

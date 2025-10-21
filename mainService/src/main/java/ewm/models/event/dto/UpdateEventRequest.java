@@ -2,6 +2,7 @@ package ewm.models.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Future;
+import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -17,14 +18,15 @@ import java.time.LocalDateTime;
 @Builder
 public class UpdateEventRequest {
 
-    @Size(max = 200)
+    @Size(min = 3, max = 200, message = "Заголовок должен быть от 3 до 200 символов")
     private String title;
 
-    @Size(max = 1000)
+    @Size(min = 20, max = 1000, message = "Аннотация должна быть от 20 до 1000 символов")
     private String annotation;
 
     private Long categoryId;
 
+    @Size(min = 20, max = 7000, message = "Описание должно быть от 20 до 7000 символов")
     private String description;
 
     @Future
@@ -33,6 +35,7 @@ public class UpdateEventRequest {
 
     private Boolean paid;
 
+    @Min(value = 0, message = "Лимит участников не может быть отрицательным")
     private Integer participantLimit;
 
     private Boolean requestModeration;

@@ -23,7 +23,10 @@ public class AdminUsersServiceImpl implements AdminUsersService {
 
     @Override
     public List<UserDto> getUsersByAdmin(List<Long> ids, int from, int size) {
-        Pageable pageable = PageRequest.of(from / size, size);
+
+        int page = from / size;
+
+        Pageable pageable = PageRequest.of(page, size);
 
         Page<User> users;
 

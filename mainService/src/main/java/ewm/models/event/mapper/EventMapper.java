@@ -1,14 +1,17 @@
 package ewm.models.event.mapper;
 
+import ewm.models.event.dto.NewEventRequest;
+import ewm.models.event.model.EventState;
 import lombok.experimental.UtilityClass;
 import ewm.models.category.mapper.CategoryMapper;
 import ewm.models.category.model.Category;
-import ewm.models.event.dto.EventRequestDto;
 import ewm.models.event.dto.EventResponseDto;
 import ewm.models.event.dto.EventShortResponseDto;
 import ewm.models.event.model.Event;
 import ewm.models.user.mapper.UserMapper;
 import ewm.models.user.model.User;
+
+import java.time.LocalDateTime;
 
 @UtilityClass
 public class EventMapper {
@@ -33,24 +36,6 @@ public class EventMapper {
                 .build();
     }
 
-    public Event toEventEntity(EventRequestDto eventRequestDto, Category category, User initiator) {
-        return Event.builder()
-                .title(eventRequestDto.getTitle())
-                .annotation(eventRequestDto.getAnnotation())
-                .description(eventRequestDto.getDescription())
-                .category(category)
-                .initiator(initiator)
-                .eventDate(eventRequestDto.getEventDate())
-                .paid(eventRequestDto.getPaid())
-                .participantLimit(eventRequestDto.getParticipantLimit())
-                .requestModeration(eventRequestDto.getRequestModeration())
-                .createdOn(eventRequestDto.getCreatedOn())
-                .publishedOn(eventRequestDto.getPublishedOn())
-                .views(eventRequestDto.getViews())
-                .confirmedRequests(eventRequestDto.getConfirmedRequests())
-                .eventState(eventRequestDto.getEventState())
-                .build();
-    }
 
     public EventShortResponseDto toEventShortResponseDto(Event event) {
         return EventShortResponseDto.builder()
@@ -66,4 +51,21 @@ public class EventMapper {
 
     }
 
+    public static Event toEvent(NewEventRequest newEventRequest, User initiator, Category category) {
+        return Event.builder()
+                .title(newEventRequest.getTitle())
+                .annotation(newEventRequest.getAnnotation())
+                .description(newEventRequest.getDescription())
+                .category(category)
+                .initiator(initiator)
+                .eventDate(newEventRequest.getEventDate())
+                .paid(newEventRequest.getPaid() != null ? newEventRequest.getPaid() : false)
+                .participantLimit(newEventRequest.getParticipantLimit() != null ? newEventRequest.getParticipantLimit() : 0)
+                .requestModeration(newEventRequest.getRequestModeration() != null ? newEventRequest.getRequestModeration() : true)
+                .createdOn(LocalDateTime.now())
+                .eventState(EventState.PENDING)
+                .views(0L)
+                .confirmedRequests(0L)
+                .build();
+    }
 }

@@ -1,12 +1,12 @@
 package ewm.API.privateAPI.events;
 
+import ewm.models.event.dto.NewEventRequest;
 import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
 import ewm.models.category.model.Category;
 import ewm.models.category.repo.CategoryRepo;
-import ewm.models.event.dto.EventRequestDto;
 import ewm.models.event.dto.EventResponseDto;
 import ewm.models.event.dto.UpdateEventRequest;
 import ewm.models.event.mapper.EventMapper;
@@ -42,10 +42,10 @@ public class EventPrivateServiceImpl implements EventPrivateService {
 
     @Override
     @Transactional
-    public EventResponseDto createNewEvent(Long userId, EventRequestDto eventRequestDto) {
+    public EventResponseDto createNewEvent(Long userId, NewEventRequest eventRequestDto) {
         User currentUser = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         Category categoryForCurrentEvent = categoryRepo.findById(eventRequestDto.getCategoryId()).orElseThrow(() -> new NotFoundException("Такой категории не существует"));
-        Event currentEvent = EventMapper.toEventEntity(eventRequestDto, categoryForCurrentEvent, currentUser);
+        Event currentEvent = EventMapper.toEvent(eventRequestDto, currentUser, categoryForCurrentEvent);
         if (!checkDate(currentEvent.getEventDate())) {
             throw new ValidationException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
