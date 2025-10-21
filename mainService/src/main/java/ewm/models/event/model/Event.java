@@ -27,10 +27,10 @@ public class Event {
     @Column(name = "title", columnDefinition = "TEXT")
     private String title;
 
-    @Column(name = "annotation")
+    @Column(name = "annotation", columnDefinition = "TEXT")
     private String annotation;
 
-    @Column(name = "description")
+    @Column(name = "description", columnDefinition = "TEXT")
     private String description;
 
     @ManyToOne
