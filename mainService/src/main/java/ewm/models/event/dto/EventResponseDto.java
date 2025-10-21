@@ -20,19 +20,12 @@ public class EventResponseDto {
 
     private Long id;
 
-    @NotBlank
-    @Size(max = 200)
     private String title;
 
-    @NotBlank
-    @Size(max = 1000)
     private String annotation;
 
-    @NotNull
     private CategoryDto category;
 
-    @NotNull
-    @PastOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime createdOn;
 
@@ -40,23 +33,18 @@ public class EventResponseDto {
 
     private Integer confirmedRequests;
 
-    @NotNull
-    @Future
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
-
-    @NotNull
+    
     private UserShortDto initiator;
 
     private Integer participantLimit;
 
-    @FutureOrPresent
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime publishedOn;
 
     private Boolean requestModeration;
 
-    @NotNull
     private EventState state;
 
     private Boolean paid;
