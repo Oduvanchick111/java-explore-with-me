@@ -53,7 +53,8 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         if (eventRequestDto.getParticipantLimit() != null && eventRequestDto.getParticipantLimit() < 0) {
             throw new ValidateException("Лимит участников не может быть отрицательным");
         }
-        return EventMapper.toEventResponseDto(currentEvent);
+        Event savedEvent = eventRepo.save(currentEvent);
+        return EventMapper.toEventResponseDto(savedEvent);
     }
 
     @Override

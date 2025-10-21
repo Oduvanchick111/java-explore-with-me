@@ -16,6 +16,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 @Service
 @AllArgsConstructor
@@ -36,8 +38,14 @@ public class AdminCompilationsServiceImpl implements AdminCompilationsService {
                 .build();
 
         if (compilationDto.getEvents() != null && !compilationDto.getEvents().isEmpty()) {
-            List<Event> events = eventRepo.findByIdIn(compilationDto.getEvents());
-            compilation.setEvents(new HashSet<>(events));
+            List<Long> validEventIds = compilationDto.getEvents().stream()
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.toList());
+
+            if (!validEventIds.isEmpty()) {
+                List<Event> events = eventRepo.findByIdIn(validEventIds);
+                compilation.setEvents(new HashSet<>(events));
+            }
         }
 
         Compilation saved = compilationRepo.save(compilation);

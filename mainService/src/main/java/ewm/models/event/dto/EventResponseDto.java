@@ -57,7 +57,7 @@ public class EventResponseDto {
     private Boolean requestModeration;
 
     @NotNull
-    private EventState eventState;
+    private EventState state;
 
     private Boolean paid;
 
