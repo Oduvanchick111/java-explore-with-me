@@ -5,7 +5,6 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ewm.models.participationRequest.dto.EventRequestStatusUpdateRequest;
 import ewm.models.participationRequest.dto.EventRequestStatusUpdateResult;
-import ewm.models.participationRequest.dto.ParticipationRequestDto;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 

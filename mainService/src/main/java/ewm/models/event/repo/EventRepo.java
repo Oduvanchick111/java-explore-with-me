@@ -43,9 +43,6 @@ public interface EventRepo extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE e.initiator.id = :initiatorId AND e.id = :eventId")
     Optional<Event> findEventByUserIdAndEventId(@Param("initiatorId") Long initiatorId, @Param("eventId") Long eventId);
 
-    @Query("SELECT e FROM Event e WHERE e.id = :eventId AND e.eventState = 'PUBLISHED' AND e.initiator.id != :userId")
-    Optional<Event> findByIdWithChecks(@Param("eventId") Long eventId, @Param("userId") Long userId);
-
     boolean existsByCategoryId(Long categoryId);
 
     @Query("SELECT e FROM Event e WHERE " +

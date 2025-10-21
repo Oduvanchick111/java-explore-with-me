@@ -1,5 +1,6 @@
 package ewm.API.privateAPI.participationRequests;
 
+import ewm.models.event.model.EventState;
 import ewm.models.participationRequest.dto.ParticipationResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -9,7 +10,6 @@ import ewm.models.event.model.Event;
 import ewm.models.event.repo.EventRepo;
 import ewm.models.participationRequest.dto.EventRequestStatusUpdateRequest;
 import ewm.models.participationRequest.dto.EventRequestStatusUpdateResult;
-import ewm.models.participationRequest.dto.ParticipationRequestDto;
 import ewm.models.participationRequest.mapper.ParticipationRequestMapper;
 import ewm.models.participationRequest.model.ParticipationRequest;
 import ewm.models.participationRequest.model.Status;
@@ -79,8 +79,16 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
             throw new ConflictException("Нельзя добавить повторный запрос");
         }
 
-        Event event = eventRepo.findByIdWithChecks(eventId, userId)
-                .orElseThrow(() -> new NotFoundException("Событие не найдено или недоступно"));
+        Event event = eventRepo.findById(eventId)
+                .orElseThrow(() -> new NotFoundException("Событие не найдено"));
+
+        if (event.getInitiator().getId().equals(userId)) {
+            throw new ConflictException("Инициатор события не может добавить запрос на участие в своём событии");
+        }
+
+        if (event.getEventState() != EventState.PUBLISHED) {
+            throw new ConflictException("Нельзя участвовать в неопубликованном событии");
+        }
 
         if (event.getParticipantLimit() > 0) {
             long confirmedCount = participationRepo.countByEventIdAndStatus(eventId, Status.CONFIRMED);
