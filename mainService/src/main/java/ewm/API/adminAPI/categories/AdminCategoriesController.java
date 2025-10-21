@@ -28,6 +28,7 @@ public class AdminCategoriesController {
     CategoryDto updateCategory(@PathVariable Long catId, @Valid @RequestBody CategoryDto categoryDto) {
         return adminCategoriesService.updateCategory(catId, categoryDto);
     }
+
     @GetMapping("/test-error")
     public String testError() {
         throw new IllegalArgumentException("Test error handling");
