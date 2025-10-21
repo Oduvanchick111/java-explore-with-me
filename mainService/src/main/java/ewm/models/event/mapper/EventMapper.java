@@ -40,6 +40,7 @@ public class EventMapper {
 
     public EventShortResponseDto toEventShortResponseDto(Event event) {
         return EventShortResponseDto.builder()
+                .id(event.getId())
                 .title(event.getTitle())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))

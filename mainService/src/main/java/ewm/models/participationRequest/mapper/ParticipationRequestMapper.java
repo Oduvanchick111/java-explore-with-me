@@ -1,5 +1,6 @@
 package ewm.models.participationRequest.mapper;
 
+import ewm.models.participationRequest.dto.ParticipationResponseDto;
 import lombok.experimental.UtilityClass;
 import ewm.models.event.model.Event;
 import ewm.models.participationRequest.dto.ParticipationRequestDto;
@@ -18,8 +19,8 @@ public class ParticipationRequestMapper {
                 .build();
     }
 
-    public ParticipationRequestDto toParticipationRequestDto(ParticipationRequest participationRequest) {
-        return ParticipationRequestDto.builder()
+    public ParticipationResponseDto toParticipationResponseDto(ParticipationRequest participationRequest) {
+        return ParticipationResponseDto.builder()
                 .id(participationRequest.getId())
                 .requesterId(participationRequest.getRequester().getId())
                 .eventId(participationRequest.getEvent().getId())

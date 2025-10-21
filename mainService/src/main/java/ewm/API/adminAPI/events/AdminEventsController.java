@@ -4,6 +4,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ewm.models.event.dto.EventResponseDto;
 import ewm.models.event.dto.UpdateEventRequest;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDateTime;
@@ -20,8 +21,8 @@ public class AdminEventsController {
     List<EventResponseDto> getEventsByAdmin(@RequestParam(required = false) List<Long> users,
                                             @RequestParam(required = false) List<String> states,
                                             @RequestParam(required = false) List<Long> categories,
-                                            @RequestParam(required = false) LocalDateTime rangeStart,
-                                            @RequestParam(required = false) LocalDateTime rangeEnd,
+                                            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
+                                            @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,
                                             @RequestParam(defaultValue = "0") int from,
                                             @RequestParam(defaultValue = "10") int size) {
         return adminEventsService.getEventsByAdmin(users, states, categories, rangeStart, rangeEnd, from, size);

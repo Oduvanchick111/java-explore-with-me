@@ -1,5 +1,6 @@
 package ewm.API.privateAPI.participationRequests;
 
+import ewm.models.participationRequest.dto.ParticipationResponseDto;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
@@ -31,14 +32,14 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
     private final ParticipationRepo participationRepo;
 
     @Override
-    public List<ParticipationRequestDto> getRequestsByEventId(Long userId, Long eventId) {
+    public List<ParticipationResponseDto> getRequestsByEventId(Long userId, Long eventId) {
         User user = checkUser(userId);
         Event event = eventRepo.findEventByUserIdAndEventId(userId, eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id=" + eventId + " не найдено"));
 
         List<ParticipationRequest> requests = participationRepo.findAllByEventId(eventId);
 
-        return requests.stream().map(ParticipationRequestMapper::toParticipationRequestDto).toList();
+        return requests.stream().map(ParticipationRequestMapper::toParticipationResponseDto).toList();
     }
 
     @Override
@@ -64,14 +65,14 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
     }
 
     @Override
-    public List<ParticipationRequestDto> getRequestByUserId(Long userId) {
+    public List<ParticipationResponseDto> getRequestByUserId(Long userId) {
         User user = checkUser(userId);
-        return participationRepo.findByRequesterId(userId).stream().map(ParticipationRequestMapper::toParticipationRequestDto).toList();
+        return participationRepo.findByRequesterId(userId).stream().map(ParticipationRequestMapper::toParticipationResponseDto).toList();
     }
 
     @Override
     @Transactional
-    public ParticipationRequestDto createParticipationRequest(Long userId, Long eventId) {
+    public ParticipationResponseDto createParticipationRequest(Long userId, Long eventId) {
         User user = checkUser(userId);
 
         if (participationRepo.existsByEventIdAndRequesterId(eventId, userId)) {
@@ -98,12 +99,12 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
 
         ParticipationRequest saved = participationRepo.save(request);
 
-        return ParticipationRequestMapper.toParticipationRequestDto(saved);
+        return ParticipationRequestMapper.toParticipationResponseDto(saved);
     }
 
     @Override
     @Transactional
-    public ParticipationRequestDto cancelRequest(Long userId, Long requestId) {
+    public ParticipationResponseDto cancelRequest(Long userId, Long requestId) {
         User requester = checkUser(userId);
 
         ParticipationRequest request = participationRepo.findByIdAndRequesterId(requestId, userId)
@@ -117,7 +118,7 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
 
         ParticipationRequest updated = participationRepo.save(request);
 
-        return ParticipationRequestMapper.toParticipationRequestDto(updated);
+        return ParticipationRequestMapper.toParticipationResponseDto(updated);
     }
 
     private User checkUser(Long userId) {
@@ -187,10 +188,10 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
                                                         List<ParticipationRequest> rejected) {
         return EventRequestStatusUpdateResult.builder()
                 .confirmedRequests(confirmed.stream()
-                        .map(ParticipationRequestMapper::toParticipationRequestDto)
+                        .map(ParticipationRequestMapper::toParticipationResponseDto)
                         .collect(Collectors.toList()))
                 .rejectedRequests(rejected.stream()
-                        .map(ParticipationRequestMapper::toParticipationRequestDto)
+                        .map(ParticipationRequestMapper::toParticipationResponseDto)
                         .collect(Collectors.toList()))
                 .build();
     }
