@@ -21,6 +21,8 @@ CREATE TABLE IF NOT EXISTS events (
     title TEXT NOT NULL,
     annotation TEXT NOT NULL,
     description TEXT,
+    lat FLOAT,
+    lon FLOAT,
     category_id BIGINT NOT NULL REFERENCES categories(id),
     initiator_id BIGINT NOT NULL REFERENCES users(id),
     event_date TIMESTAMP NOT NULL,

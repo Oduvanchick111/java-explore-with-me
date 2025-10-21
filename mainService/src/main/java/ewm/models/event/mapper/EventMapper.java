@@ -33,6 +33,7 @@ public class EventMapper {
                 .state(event.getEventState())
                 .paid(event.getPaid())
                 .views(event.getViews())
+                .location(event.getLocation())
                 .build();
     }
 
@@ -64,6 +65,7 @@ public class EventMapper {
                 .requestModeration(newEventRequest.getRequestModeration() != null ? newEventRequest.getRequestModeration() : true)
                 .createdOn(LocalDateTime.now())
                 .eventState(EventState.PENDING)
+                .location(newEventRequest.getLocation())
                 .views(0L)
                 .confirmedRequests(0L)
                 .build();

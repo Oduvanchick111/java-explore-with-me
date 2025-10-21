@@ -1,6 +1,7 @@
 package ewm.models.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import ewm.models.location.Location;
 import jakarta.validation.constraints.Future;
 import jakarta.validation.constraints.Min;
 import jakarta.validation.constraints.Size;
@@ -32,6 +33,8 @@ public class UpdateEventRequest {
     @Future
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
+
+    private Location location;
 
     private Boolean paid;
 

@@ -1,6 +1,7 @@
 package ewm.models.event.dto;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import ewm.models.location.Location;
 import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,8 @@ public class NewEventRequest {
     @NotBlank
     @Size(min = 20, max = 7000)
     private String description;
+
+    private Location location;
 
     @NotNull
     @Future

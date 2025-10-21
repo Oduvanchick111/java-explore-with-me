@@ -1,6 +1,7 @@
 package ewm.models.event.model;
 
 import ewm.models.category.model.Category;
+import ewm.models.location.Location;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -42,6 +43,9 @@ public class Event {
 
     @Column(name = "event_date")
     private LocalDateTime eventDate;
+
+    @Embedded
+    private Location location;
 
     @Column(name = "paid")
     private Boolean paid;
