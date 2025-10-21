@@ -2,6 +2,7 @@ package ewm.API.privateAPI.events;
 
 import ewm.models.event.dto.NewEventRequest;
 import jakarta.validation.Valid;
+import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import ewm.models.event.dto.EventResponseDto;
 import ewm.models.event.dto.UpdateEventRequest;
@@ -34,7 +35,10 @@ public class EventPrivateController {
     }
 
     @PatchMapping("/{userId}/events/{eventId}")
-    EventResponseDto updateEventByEventId(@PathVariable Long userId, @PathVariable Long eventId, @Valid @RequestBody UpdateEventRequest updateEventRequest) {
+    EventResponseDto updateEventByEventId(@PathVariable Long userId, @PathVariable Long eventId, @Valid @RequestBody (required = false) UpdateEventRequest updateEventRequest) {
+        if (updateEventRequest == null) {
+            throw new ValidationException("Тело запроса не может быть пустым");
+        }
         return eventPrivateService.updateEventByEventId(userId, eventId, updateEventRequest);
     }
 }

@@ -44,7 +44,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
     @Transactional
     public EventResponseDto createNewEvent(Long userId, NewEventRequest eventRequestDto) {
         User currentUser = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
-        Category categoryForCurrentEvent = categoryRepo.findById(eventRequestDto.getCategoryId()).orElseThrow(() -> new NotFoundException("Такой категории не существует"));
+        Category categoryForCurrentEvent = categoryRepo.findById(eventRequestDto.getCategory()).orElseThrow(() -> new NotFoundException("Такой категории не существует"));
         Event currentEvent = EventMapper.toEvent(eventRequestDto, currentUser, categoryForCurrentEvent);
         if (!checkDate(currentEvent.getEventDate())) {
             throw new ValidationException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
