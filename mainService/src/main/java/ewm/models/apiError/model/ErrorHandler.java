@@ -7,6 +7,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.stream.Collectors;
+
 @RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler(NotFoundException.class)
@@ -15,7 +17,13 @@ public class ErrorHandler {
         return new ErrorResponse("Объект не найден", exception.getMessage());
     }
 
-    @ExceptionHandler({MethodArgumentNotValidException.class, ValidateException.class})
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    @ResponseStatus(HttpStatus.BAD_REQUEST)
+    public ErrorResponse handleMethodArgumentNotValid(final MethodArgumentNotValidException exception) {
+        return new ErrorResponse("Ошибка валидации", exception.getMessage());
+    }
+
+    @ExceptionHandler(ValidateException.class)
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     public ErrorResponse handleValidateException(final ValidateException exception) {
         return new ErrorResponse("Ошибка валидации", exception.getMessage());
