@@ -69,6 +69,9 @@ public class AdminCompilationsServiceImpl implements AdminCompilationsService {
             if (!updateRequest.getTitle().equals(compilation.getTitle()) && compilationRepo.existsByTitle(updateRequest.getTitle())) {
                 throw new ConflictException("Заголовок уже занят");
             }
+            if(updateRequest.getTitle().isBlank()) {
+                throw new ConflictException("Заголовок не может быть пустым");
+            }
             compilation.setTitle(updateRequest.getTitle());
         }
 
