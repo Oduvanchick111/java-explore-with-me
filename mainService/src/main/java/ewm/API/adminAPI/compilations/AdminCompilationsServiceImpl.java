@@ -1,6 +1,5 @@
 package ewm.API.adminAPI.compilations;
 
-import ewm.models.apiError.model.ValidateException;
 import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
