@@ -1,6 +1,5 @@
 package ewm.API.privateAPI.events;
 
-import ewm.models.apiError.model.ValidateException;
 import ewm.models.event.dto.NewEventRequest;
 import jakarta.validation.ValidationException;
 import lombok.AllArgsConstructor;
