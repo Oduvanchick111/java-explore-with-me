@@ -33,9 +33,25 @@ public class AdminEventsServiceImpl implements AdminEventsService {
     @Override
     public List<EventResponseDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
+        Page<Event> events;
 
-        Page<Event> events = eventRepo.findEventsByAdminFilters(
-                users, states, categories, rangeStart, rangeEnd, pageable);
+        if (users != null && states != null && categories != null) {
+            events = eventRepo.findWithAllFilters(users, states, categories, rangeStart, rangeEnd, pageable);
+        } else if (users != null && states != null) {
+            events = eventRepo.findWithUsersAndStates(users, states, rangeStart, rangeEnd, pageable);
+        } else if (users != null && categories != null) {
+            events = eventRepo.findWithUsersAndCategories(users, categories, rangeStart, rangeEnd, pageable);
+        } else if (states != null && categories != null) {
+            events = eventRepo.findWithStatesAndCategories(states, categories, rangeStart, rangeEnd, pageable);
+        } else if (users != null) {
+            events = eventRepo.findWithUsers(users, rangeStart, rangeEnd, pageable);
+        } else if (states != null) {
+            events = eventRepo.findWithStates(states, rangeStart, rangeEnd, pageable);
+        } else if (categories != null) {
+            events = eventRepo.findWithCategories(categories, rangeStart, rangeEnd, pageable);
+        } else {
+            events = eventRepo.findWithDateRange(rangeStart, rangeEnd, pageable);
+        }
 
         return events.stream()
                 .map(EventMapper::toEventResponseDto).toList();

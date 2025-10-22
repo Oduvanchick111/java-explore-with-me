@@ -19,9 +19,9 @@ public class ParticipationResponseDto {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime created;
 
-    private Long eventId;
+    private Long event;
 
-    private Long requesterId;
+    private Long requester;
 
     private Status status;
 }

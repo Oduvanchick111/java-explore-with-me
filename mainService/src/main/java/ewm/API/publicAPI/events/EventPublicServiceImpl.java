@@ -37,7 +37,7 @@ public class EventPublicServiceImpl implements EventPublicService {
 
     @Override
     public List<EventResponseDto> getAllEvents(String text,
-                                               List<Integer> categories,
+                                               List<Long> categories,
                                                Boolean paid,
                                                LocalDateTime rangeStart,
                                                LocalDateTime rangeEnd,

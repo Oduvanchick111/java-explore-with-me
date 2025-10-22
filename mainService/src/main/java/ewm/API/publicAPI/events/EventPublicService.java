@@ -9,7 +9,7 @@ import java.util.List;
 public interface EventPublicService {
 
     List<EventResponseDto> getAllEvents(String text,
-                                        List<Integer> categories,
+                                        List<Long> categories,
                                         Boolean paid,
                                         LocalDateTime rangeStart,
                                         LocalDateTime rangeEnd,

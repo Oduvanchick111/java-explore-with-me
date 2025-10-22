@@ -30,7 +30,7 @@ public interface EventRepo extends JpaRepository<Event, Long> {
               )
             """)
     Page<Event> findPublicEvents(@Param("text") String text,
-                                 @Param("categories") List<Integer> categories,
+                                 @Param("categories") List<Long> categories,
                                  @Param("paid") Boolean paid,
                                  @Param("rangeStart") LocalDateTime rangeStart,
                                  @Param("rangeEnd") LocalDateTime rangeEnd,
@@ -46,17 +46,85 @@ public interface EventRepo extends JpaRepository<Event, Long> {
     boolean existsByCategoryId(Long categoryId);
 
     @Query("SELECT e FROM Event e WHERE " +
-            "(:users IS NULL OR e.initiator.id IN :users) AND " +
-            "(:states IS NULL OR e.eventState IN :states) AND " +
-            "(:categories IS NULL OR e.category.id IN :categories) AND " +
+            "e.initiator.id IN :users AND " +
+            "e.eventState IN :states AND " +
+            "e.category.id IN :categories AND " +
             "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
             "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
-    Page<Event> findEventsByAdminFilters(@Param("users") List<Long> users,
-                                         @Param("states") List<String> states,
-                                         @Param("categories") List<Long> categories,
-                                         @Param("rangeStart") LocalDateTime rangeStart,
-                                         @Param("rangeEnd") LocalDateTime rangeEnd,
-                                         Pageable pageable);
+    Page<Event> findWithAllFilters(@Param("users") List<Long> users,
+                                   @Param("states") List<String> states,
+                                   @Param("categories") List<Long> categories,
+                                   @Param("rangeStart") LocalDateTime rangeStart,
+                                   @Param("rangeEnd") LocalDateTime rangeEnd,
+                                   Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE " +
+            "e.initiator.id IN :users AND " +
+            "e.eventState IN :states AND " +
+            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
+            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+    Page<Event> findWithUsersAndStates(@Param("users") List<Long> users,
+                                       @Param("states") List<String> states,
+                                       @Param("rangeStart") LocalDateTime rangeStart,
+                                       @Param("rangeEnd") LocalDateTime rangeEnd,
+                                       Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE " +
+            "e.initiator.id IN :users AND " +
+            "e.category.id IN :categories AND " +
+            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
+            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+    Page<Event> findWithUsersAndCategories(@Param("users") List<Long> users,
+                                           @Param("categories") List<Long> categories,
+                                           @Param("rangeStart") LocalDateTime rangeStart,
+                                           @Param("rangeEnd") LocalDateTime rangeEnd,
+                                           Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE " +
+            "e.eventState IN :states AND " +
+            "e.category.id IN :categories AND " +
+            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
+            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+    Page<Event> findWithStatesAndCategories(@Param("states") List<String> states,
+                                            @Param("categories") List<Long> categories,
+                                            @Param("rangeStart") LocalDateTime rangeStart,
+                                            @Param("rangeEnd") LocalDateTime rangeEnd,
+                                            Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE " +
+            "e.initiator.id IN :users AND " +
+            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
+            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+    Page<Event> findWithUsers(@Param("users") List<Long> users,
+                              @Param("rangeStart") LocalDateTime rangeStart,
+                              @Param("rangeEnd") LocalDateTime rangeEnd,
+                              Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE " +
+            "e.eventState IN :states AND " +
+            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
+            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+    Page<Event> findWithStates(@Param("states") List<String> states,
+                               @Param("rangeStart") LocalDateTime rangeStart,
+                               @Param("rangeEnd") LocalDateTime rangeEnd,
+                               Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE " +
+            "e.category.id IN :categories AND " +
+            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
+            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+    Page<Event> findWithCategories(@Param("categories") List<Long> categories,
+                                   @Param("rangeStart") LocalDateTime rangeStart,
+                                   @Param("rangeEnd") LocalDateTime rangeEnd,
+                                   Pageable pageable);
+
+    @Query("SELECT e FROM Event e WHERE " +
+            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
+            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+    Page<Event> findWithDateRange(@Param("rangeStart") LocalDateTime rangeStart,
+                                  @Param("rangeEnd") LocalDateTime rangeEnd,
+                                  Pageable pageable);
+
 
     List<Event> findByIdIn(List<Long> ids);
 }

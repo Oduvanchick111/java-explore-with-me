@@ -22,8 +22,8 @@ public class ParticipationRequestMapper {
     public ParticipationResponseDto toParticipationResponseDto(ParticipationRequest participationRequest) {
         return ParticipationResponseDto.builder()
                 .id(participationRequest.getId())
-                .requesterId(participationRequest.getRequester().getId())
-                .eventId(participationRequest.getEvent().getId())
+                .requester(participationRequest.getRequester().getId())
+                .event(participationRequest.getEvent().getId())
                 .status(participationRequest.getStatus()).build();
     }
 }
