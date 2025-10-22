@@ -49,8 +49,6 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         if (!checkDate(currentEvent.getEventDate())) {
             throw new ValidationException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
-        currentEvent.setEventState(EventState.PUBLISHED);
-        currentEvent.setPublishedOn(LocalDateTime.now());
         Event savedEvent = eventRepo.save(currentEvent);
         return EventMapper.toEventResponseDto(savedEvent);
     }
@@ -70,7 +68,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         User currentUser = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
 
-        Event event = eventRepo.findEventByUserIdAndEventId(eventId, userId)
+        Event event = eventRepo.findEventByUserIdAndEventId(userId, eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id=" + eventId + " не найдено"));
 
 
