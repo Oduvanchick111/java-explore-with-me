@@ -14,21 +14,24 @@ import java.util.Optional;
 public interface EventRepo extends JpaRepository<Event, Long> {
 
     @Query("""
-            SELECT e
-            FROM Event e
-            WHERE e.eventState = 'PUBLISHED'
-              AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%'))
-                   OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%')))
-              AND (:paid IS NULL OR e.paid = :paid)
-              AND (:categories IS NULL OR e.category.id IN :categories)
-              AND (COALESCE(:rangeStart, CURRENT_TIMESTAMP) IS NULL OR e.eventDate >= COALESCE(:rangeStart, CURRENT_TIMESTAMP))
-              AND (:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)
-              AND (
-                  :onlyAvailable = false OR
-                  e.participantLimit = 0 OR
-                  e.confirmedRequests < e.participantLimit
-              )
-            """)
+        SELECT e
+        FROM Event e
+        WHERE e.eventState = 'PUBLISHED'
+          AND (
+              :text IS NULL OR
+              LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%')) OR
+              LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%'))
+          )
+          AND (:paid IS NULL OR e.paid = :paid)
+          AND (:categories IS NULL OR e.category.id IN :categories)
+          AND e.eventDate >= COALESCE(:rangeStart, CURRENT_TIMESTAMP)
+          AND e.eventDate <= COALESCE(:rangeEnd, e.eventDate)
+          AND (
+              :onlyAvailable = false OR
+              e.participantLimit = 0 OR
+              e.confirmedRequests < e.participantLimit
+          )
+        """)
     Page<Event> findPublicEvents(@Param("text") String text,
                                  @Param("categories") List<Long> categories,
                                  @Param("paid") Boolean paid,
@@ -49,8 +52,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
             "e.initiator.id IN :users AND " +
             "e.eventState IN :states AND " +
             "e.category.id IN :categories AND " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithAllFilters(@Param("users") List<Long> users,
                                    @Param("states") List<String> states,
                                    @Param("categories") List<Long> categories,
@@ -61,8 +64,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE " +
             "e.initiator.id IN :users AND " +
             "e.eventState IN :states AND " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithUsersAndStates(@Param("users") List<Long> users,
                                        @Param("states") List<String> states,
                                        @Param("rangeStart") LocalDateTime rangeStart,
@@ -72,8 +75,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE " +
             "e.initiator.id IN :users AND " +
             "e.category.id IN :categories AND " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithUsersAndCategories(@Param("users") List<Long> users,
                                            @Param("categories") List<Long> categories,
                                            @Param("rangeStart") LocalDateTime rangeStart,
@@ -83,8 +86,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
     @Query("SELECT e FROM Event e WHERE " +
             "e.eventState IN :states AND " +
             "e.category.id IN :categories AND " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithStatesAndCategories(@Param("states") List<String> states,
                                             @Param("categories") List<Long> categories,
                                             @Param("rangeStart") LocalDateTime rangeStart,
@@ -93,8 +96,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e WHERE " +
             "e.initiator.id IN :users AND " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithUsers(@Param("users") List<Long> users,
                               @Param("rangeStart") LocalDateTime rangeStart,
                               @Param("rangeEnd") LocalDateTime rangeEnd,
@@ -102,8 +105,8 @@ public interface EventRepo extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e WHERE " +
             "e.eventState IN :states AND " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithStates(@Param("states") List<String> states,
                                @Param("rangeStart") LocalDateTime rangeStart,
                                @Param("rangeEnd") LocalDateTime rangeEnd,
@@ -111,16 +114,16 @@ public interface EventRepo extends JpaRepository<Event, Long> {
 
     @Query("SELECT e FROM Event e WHERE " +
             "e.category.id IN :categories AND " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithCategories(@Param("categories") List<Long> categories,
                                    @Param("rangeStart") LocalDateTime rangeStart,
                                    @Param("rangeEnd") LocalDateTime rangeEnd,
                                    Pageable pageable);
 
     @Query("SELECT e FROM Event e WHERE " +
-            "(:rangeStart IS NULL OR e.eventDate >= :rangeStart) AND " +
-            "(:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)")
+            "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
+            "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithDateRange(@Param("rangeStart") LocalDateTime rangeStart,
                                   @Param("rangeEnd") LocalDateTime rangeEnd,
                                   Pageable pageable);
