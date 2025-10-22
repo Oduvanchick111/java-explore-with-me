@@ -57,7 +57,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
     public EventResponseDto getUserEventByEventId(Long userId, Long eventId) {
         User currentUser = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
-        Event event = eventRepo.findEventByUserIdAndEventId(eventId, userId)
+        Event event = eventRepo.findEventByUserIdAndEventId(userId, eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id=" + eventId + " не найдено"));
         return EventMapper.toEventResponseDto(event);
     }
