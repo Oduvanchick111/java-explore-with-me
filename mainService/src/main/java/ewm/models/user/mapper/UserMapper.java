@@ -28,7 +28,7 @@ public class UserMapper {
             return null;
         }
         return UserShortDto.builder()
-                .id(user.getId()) 
+                .id(user.getId())
                 .name(user.getName())
                 .build();
     }
