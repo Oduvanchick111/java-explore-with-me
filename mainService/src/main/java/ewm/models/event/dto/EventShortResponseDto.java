@@ -22,25 +22,17 @@ public class EventShortResponseDto {
 
     private Long id;
 
-    @NotBlank
-    @Size(max = 200)
     private String title;
 
-    @NotNull
-    @Size(max = 1000)
     private String annotation;
 
-    @NotNull
     private CategoryDto category;
 
     private Long confirmedRequests;
 
-    @NotNull
-    @Future
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
     private LocalDateTime eventDate;
 
-    @NotNull
     private UserShortDto initiator;
 
     private Boolean paid;
