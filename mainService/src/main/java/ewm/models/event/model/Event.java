@@ -24,13 +24,13 @@ public class Event {
     @Column(name = "id")
     private Long id;
 
-    @Column(name = "title", columnDefinition = "TEXT")
+    @Column(name = "title")
     private String title;
 
-    @Column(name = "annotation", columnDefinition = "TEXT")
+    @Column(name = "annotation")
     private String annotation;
 
-    @Column(name = "description", columnDefinition = "TEXT")
+    @Column(name = "description")
     private String description;
 
     @ManyToOne

@@ -128,7 +128,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
             throw new ValidationException("Лимит участников не может быть отрицательным");
         }
 
-        if (!checkDate(updateRequest.getEventDate())) {
+        if (updateRequest.getEventDate() != null && !checkDate(updateRequest.getEventDate())) {
             throw new ConflictException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
     }
