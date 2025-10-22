@@ -64,12 +64,12 @@ public class EventPublicServiceImpl implements EventPublicService {
         Pageable pageable = PageRequest.of(page, size, sorting);
 
         Page<Event> eventPage = eventRepo.findPublicEvents(
-                text,
-                categories,
+                (text == null || text.isBlank()) ? null : text,
+                (categories == null || categories.isEmpty()) ? null : categories,
                 paid,
-                rangeStart,
-                rangeEnd,
-                onlyAvailable,
+                effectiveRangeStart,
+                effectiveRangeEnd,
+                (onlyAvailable == null) ? false : onlyAvailable,
                 pageable
         );
 
