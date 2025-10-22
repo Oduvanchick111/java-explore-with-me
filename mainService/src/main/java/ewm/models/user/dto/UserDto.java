@@ -18,10 +18,10 @@ public class UserDto {
 
     @NotBlank
     @Email
-    @Size(max = 200)
+    @Size(max = 254, min = 6)
     private String email;
 
     @NotBlank
-    @Size(max = 200)
+    @Size(min = 2, max = 250)
     private String name;
 }

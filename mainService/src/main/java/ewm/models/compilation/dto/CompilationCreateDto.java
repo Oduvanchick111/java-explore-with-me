@@ -1,5 +1,6 @@
 package ewm.models.compilation.dto;
 
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Size;
 import lombok.AllArgsConstructor;
@@ -14,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 @AllArgsConstructor
 public class CompilationCreateDto {
-    @NotEmpty(message = "Заголовок не может быть пустым")
+    @NotBlank(message = "Заголовок не может быть пустым")
     @Size(max = 50, message = "Заголовок не может превышать 50 символов")
     private String title;
 
