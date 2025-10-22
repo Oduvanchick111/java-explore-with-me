@@ -3,8 +3,8 @@ package ewm.API.publicAPI.events;
 import client.StatsClient;
 import dto.ViewStatsDto;
 import dto.endpoint.EndpointHitDto;
+import ewm.models.apiError.model.ValidateException;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.validation.ValidationException;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import ewm.models.apiError.model.NotFoundException;
@@ -47,6 +47,14 @@ public class EventPublicServiceImpl implements EventPublicService {
                                                Integer size,
                                                HttpServletRequest request) {
         saveEndpointHit(request);
+
+        if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
+            throw new ValidateException("rangeStart не может быть позже rangeEnd");
+        }
+
+        LocalDateTime effectiveRangeStart = (rangeStart != null) ? rangeStart : LocalDateTime.now();
+        LocalDateTime effectiveRangeEnd = rangeEnd;
+
         Sort sorting = Sort.by("eventDate");
         if ("VIEWS".equalsIgnoreCase(sort)) {
             sorting = Sort.by(Sort.Direction.DESC, "views");
@@ -79,7 +87,7 @@ public class EventPublicServiceImpl implements EventPublicService {
     public EventResponseDto getEventById(Long eventId, HttpServletRequest request) {
         Event currentEvent = eventRepo.findById(eventId).orElseThrow(() -> new NotFoundException("Событие не существует"));
         if (!EventState.PUBLISHED.equals(currentEvent.getEventState())) {
-            throw new ValidationException("Событие не опубликовано");
+            throw new NotFoundException("Событие не опубликовано");
         }
         saveEndpointHit(request);
         Event currentEventWithStats = enrichEventWithStats(currentEvent);
