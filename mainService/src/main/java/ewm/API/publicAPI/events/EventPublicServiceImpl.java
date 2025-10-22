@@ -93,6 +93,8 @@ public class EventPublicServiceImpl implements EventPublicService {
         }
         saveEndpointHit(request);
         Event currentEventWithStats = enrichEventWithStats(currentEvent);
+        currentEventWithStats.setViews(currentEventWithStats.getViews() + 1);
+        eventRepo.save(currentEventWithStats);
         return EventMapper.toEventResponseDto(currentEventWithStats);
     }
 
