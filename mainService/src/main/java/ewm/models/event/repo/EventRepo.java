@@ -1,6 +1,7 @@
 package ewm.models.event.repo;
 
 import ewm.models.event.model.Event;
+import ewm.models.event.model.EventState;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -48,7 +49,7 @@ public interface EventRepo extends JpaRepository<Event, Long> {
             "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
             "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithAllFilters(@Param("users") List<Long> users,
-                                   @Param("states") List<String> states,
+                                   @Param("states") List<EventState> states,
                                    @Param("categories") List<Long> categories,
                                    @Param("rangeStart") LocalDateTime rangeStart,
                                    @Param("rangeEnd") LocalDateTime rangeEnd,
@@ -60,7 +61,7 @@ public interface EventRepo extends JpaRepository<Event, Long> {
             "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
             "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
     Page<Event> findWithUsersAndStates(@Param("users") List<Long> users,
-                                       @Param("states") List<String> states,
+                                       @Param("states") List<EventState> states,
                                        @Param("rangeStart") LocalDateTime rangeStart,
                                        @Param("rangeEnd") LocalDateTime rangeEnd,
                                        Pageable pageable);
@@ -81,7 +82,7 @@ public interface EventRepo extends JpaRepository<Event, Long> {
             "e.category.id IN :categories AND " +
             "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
             "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
-    Page<Event> findWithStatesAndCategories(@Param("states") List<String> states,
+    Page<Event> findWithStatesAndCategories(@Param("states") List<EventState> states,
                                             @Param("categories") List<Long> categories,
                                             @Param("rangeStart") LocalDateTime rangeStart,
                                             @Param("rangeEnd") LocalDateTime rangeEnd,
@@ -100,7 +101,7 @@ public interface EventRepo extends JpaRepository<Event, Long> {
             "e.eventState IN :states AND " +
             "e.eventDate >= COALESCE(:rangeStart, e.eventDate) AND " +
             "e.eventDate <= COALESCE(:rangeEnd, e.eventDate)")
-    Page<Event> findWithStates(@Param("states") List<String> states,
+    Page<Event> findWithStates(@Param("states") List<EventState> states,
                                @Param("rangeStart") LocalDateTime rangeStart,
                                @Param("rangeEnd") LocalDateTime rangeEnd,
                                Pageable pageable);

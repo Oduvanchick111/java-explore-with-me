@@ -1,5 +1,6 @@
 package ewm.API.adminAPI.events;
 
+import ewm.models.event.model.EventState;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import ewm.models.event.dto.EventResponseDto;
@@ -19,7 +20,7 @@ public class AdminEventsController {
 
     @GetMapping
     List<EventResponseDto> getEventsByAdmin(@RequestParam(required = false) List<Long> users,
-                                            @RequestParam(required = false) List<String> states,
+                                            @RequestParam(required = false) List<EventState> states,
                                             @RequestParam(required = false) List<Long> categories,
                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeEnd,

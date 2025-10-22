@@ -1,5 +1,9 @@
 package ewm.API.adminAPI.events;
 
+import client.StatsClient;
+import dto.ViewStatsDto;
+import ewm.models.participationRequest.model.Status;
+import ewm.models.participationRequest.repo.ParticipationRepo;
 import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
@@ -12,7 +16,6 @@ import ewm.models.event.model.Event;
 import ewm.models.event.model.EventState;
 import ewm.models.event.model.StateAction;
 import ewm.models.event.repo.EventRepo;
-import ewm.models.user.repo.UserRepo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,12 +29,13 @@ import java.util.List;
 @AllArgsConstructor
 public class AdminEventsServiceImpl implements AdminEventsService {
 
-    private final UserRepo userRepo;
+    private final StatsClient statsClient;
     private final EventRepo eventRepo;
     private final CategoryRepo categoryRepo;
+    private final ParticipationRepo participationRepo;
 
     @Override
-    public List<EventResponseDto> getEventsByAdmin(List<Long> users, List<String> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
+    public List<EventResponseDto> getEventsByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         Page<Event> events;
 
@@ -54,7 +58,9 @@ public class AdminEventsServiceImpl implements AdminEventsService {
         }
 
         return events.stream()
-                .map(EventMapper::toEventResponseDto).toList();
+                .map(this::enrichEventWithStats)
+                .map(EventMapper::toEventResponseDto)
+                .toList();
     }
 
     @Override
@@ -136,5 +142,28 @@ public class AdminEventsServiceImpl implements AdminEventsService {
             throw new ConflictException("Нельзя отклонить опубликованное событие");
         }
         event.setEventState(EventState.CANCELED);
+    }
+
+    private Event enrichEventWithStats(Event event) {
+        Long views = getEventViews(event.getId());
+        Long confirmedRequests = participationRepo.countByEventIdAndStatus(event.getId(), Status.CONFIRMED);
+        event.setViews(views);
+        event.setConfirmedRequests(confirmedRequests);
+        return event;
+    }
+
+    private Long getEventViews(Long eventId) {
+        try {
+            List<ViewStatsDto> stats = statsClient.getStatistics(
+                    LocalDateTime.now().minusYears(1),
+                    LocalDateTime.now().plusYears(1),
+                    List.of("/events/" + eventId),
+                    true
+            );
+
+            return stats.isEmpty() ? 0L : stats.get(0).getHits();
+        } catch (Exception e) {
+            return 0L;
+        }
     }
 }
