@@ -13,29 +13,18 @@ import java.util.Optional;
 
 public interface EventRepo extends JpaRepository<Event, Long> {
 
-    @Query(value = """
-    SELECT e.* FROM events e
-    WHERE e.state = 'PUBLISHED'
-      AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%'))
-           OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%')))
-      AND (:categories IS NULL OR e.category_id IN :categories)
-      AND (:paid IS NULL OR e.paid = :paid)
-      AND e.event_date >= COALESCE(:rangeStart, CURRENT_TIMESTAMP)
-      AND e.event_date <= COALESCE(:rangeEnd, e.event_date)
-      AND (:onlyAvailable = false OR e.participant_limit = 0 OR e.confirmed_requests < e.participant_limit)
-    """,
-            countQuery = """
-    SELECT COUNT(*) FROM events e
-    WHERE e.state = 'PUBLISHED'
-      AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%'))
-           OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%')))
-      AND (:categories IS NULL OR e.category_id IN :categories)
-      AND (:paid IS NULL OR e.paid = :paid)
-      AND e.event_date >= COALESCE(:rangeStart, CURRENT_TIMESTAMP)
-      AND e.event_date <= COALESCE(:rangeEnd, e.event_date)
-      AND (:onlyAvailable = false OR e.participant_limit = 0 OR e.confirmed_requests < e.participant_limit)
-    """,
-            nativeQuery = true)
+    @Query("""
+            SELECT e
+            FROM Event e
+            WHERE e.eventState = 'PUBLISHED'
+              AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%'))
+                   OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%')))
+              AND (:paid IS NULL OR e.paid = :paid)
+              AND (:categories IS NULL OR e.category.id IN :categories)
+              AND e.eventDate >= COALESCE(:rangeStart, CURRENT_TIMESTAMP)
+              AND e.eventDate <= COALESCE(:rangeEnd, e.eventDate)
+              AND (:onlyAvailable = false OR e.participantLimit = 0 OR e.confirmedRequests < e.participantLimit)
+            """)
     Page<Event> findPublicEvents(@Param("text") String text,
                                  @Param("categories") List<Long> categories,
                                  @Param("paid") Boolean paid,

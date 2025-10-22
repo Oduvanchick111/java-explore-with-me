@@ -5,6 +5,8 @@ import dto.ViewStatsDto;
 import dto.endpoint.EndpointHitDto;
 import ewm.models.apiError.model.ValidateException;
 import ewm.models.event.dto.EventShortResponseDto;
+import ewm.models.participationRequest.model.Status;
+import ewm.models.participationRequest.repo.ParticipationRepo;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -33,6 +35,7 @@ public class EventPublicServiceImpl implements EventPublicService {
 
     private final EventRepo eventRepo;
     private final StatsClient statsClient;
+    private final ParticipationRepo participationRepo;
     @Value("${app.name}")
     private String appName;
 
@@ -53,15 +56,14 @@ public class EventPublicServiceImpl implements EventPublicService {
             throw new ValidateException("rangeStart не может быть позже rangeEnd");
         }
 
-        int pageSize = (size == null || size == 0) ? 10 : size;
-        int pageNumber = from != null ? from / pageSize : 0;
+        int pageNumber = from / size;
 
         Sort sorting = Sort.by("eventDate");
         if ("VIEWS".equalsIgnoreCase(sort)) {
             sorting = Sort.by(Sort.Direction.DESC, "views");
         }
 
-        Pageable pageable = PageRequest.of(pageNumber, pageSize, sorting);
+        Pageable pageable = PageRequest.of(pageNumber, size, sorting);
 
         Page<Event> eventPage = eventRepo.findPublicEvents(
                 text,
@@ -109,7 +111,9 @@ public class EventPublicServiceImpl implements EventPublicService {
 
     private Event enrichEventWithStats(Event event) {
         Long views = getEventViews(event.getId());
+        Long confirmedRequests = participationRepo.countByEventIdAndStatus(event.getId(), Status.CONFIRMED);
         event.setViews(views);
+        event.setConfirmedRequests(confirmedRequests);
         return event;
     }
 

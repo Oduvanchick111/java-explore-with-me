@@ -44,7 +44,7 @@ public class EventMapper {
                 .title(event.getTitle())
                 .annotation(event.getAnnotation())
                 .category(CategoryMapper.toCategoryDto(event.getCategory()))
-                .confirmedRequests(event.getConfirmedRequests())
+                .confirmedRequests(event.getConfirmedRequests() != null ? event.getConfirmedRequests() : 0L)
                 .eventDate(event.getEventDate())
                 .initiator(UserMapper.toUserShortDto(event.getInitiator()))
                 .paid(event.getPaid())
