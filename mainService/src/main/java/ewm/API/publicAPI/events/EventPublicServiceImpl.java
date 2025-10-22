@@ -4,6 +4,7 @@ import client.StatsClient;
 import dto.ViewStatsDto;
 import dto.endpoint.EndpointHitDto;
 import ewm.models.apiError.model.ValidateException;
+import ewm.models.event.dto.EventShortResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -36,24 +37,21 @@ public class EventPublicServiceImpl implements EventPublicService {
     private String appName;
 
     @Override
-    public List<EventResponseDto> getAllEvents(String text,
-                                               List<Long> categories,
-                                               Boolean paid,
-                                               LocalDateTime rangeStart,
-                                               LocalDateTime rangeEnd,
-                                               Boolean onlyAvailable,
-                                               String sort,
-                                               Integer from,
-                                               Integer size,
-                                               HttpServletRequest request) {
+    public List<EventShortResponseDto> getAllEvents(String text,
+                                                    List<Long> categories,
+                                                    Boolean paid,
+                                                    LocalDateTime rangeStart,
+                                                    LocalDateTime rangeEnd,
+                                                    Boolean onlyAvailable,
+                                                    String sort,
+                                                    Integer from,
+                                                    Integer size,
+                                                    HttpServletRequest request) {
         saveEndpointHit(request);
 
         if (rangeStart != null && rangeEnd != null && rangeStart.isAfter(rangeEnd)) {
             throw new ValidateException("rangeStart не может быть позже rangeEnd");
         }
-
-        LocalDateTime effectiveRangeStart = (rangeStart != null) ? rangeStart : LocalDateTime.now();
-        LocalDateTime effectiveRangeEnd = rangeEnd;
 
         Sort sorting = Sort.by("eventDate");
         if ("VIEWS".equalsIgnoreCase(sort)) {
@@ -64,12 +62,12 @@ public class EventPublicServiceImpl implements EventPublicService {
         Pageable pageable = PageRequest.of(page, size, sorting);
 
         Page<Event> eventPage = eventRepo.findPublicEvents(
-                (text == null || text.isBlank()) ? null : text,
-                (categories == null || categories.isEmpty()) ? null : categories,
+                text,
+                categories,
                 paid,
-                effectiveRangeStart,
-                effectiveRangeEnd,
-                (onlyAvailable == null) ? false : onlyAvailable,
+                rangeStart,
+                rangeEnd,
+                onlyAvailable,
                 pageable
         );
 
@@ -79,7 +77,7 @@ public class EventPublicServiceImpl implements EventPublicService {
 
         return eventPage.getContent().stream()
                 .map(this::enrichEventWithStats)
-                .map(EventMapper::toEventResponseDto)
+                .map(EventMapper::toEventShortResponseDto)
                 .collect(Collectors.toList());
     }
 

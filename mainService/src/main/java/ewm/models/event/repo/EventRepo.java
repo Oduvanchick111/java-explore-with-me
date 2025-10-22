@@ -14,15 +14,16 @@ import java.util.Optional;
 public interface EventRepo extends JpaRepository<Event, Long> {
 
     @Query("""
-                SELECT e
-                FROM Event e
-                WHERE e.eventState = com.example.model.EventState.PUBLISHED
-                  AND (:text IS NULL OR e.annotation ILIKE CONCAT('%', :text, '%') OR e.description ILIKE CONCAT('%', :text, '%'))
-                  AND (:paid IS NULL OR e.paid = :paid)
-                  AND (:categories IS NULL OR e.category.id IN :categories)
-                  AND e.eventDate >= COALESCE(:rangeStart, CURRENT_TIMESTAMP)
-                  AND (:rangeEnd IS NULL OR e.eventDate <= :rangeEnd)
-                  AND (:onlyAvailable = false OR e.participantLimit = 0 OR e.confirmedRequests < e.participantLimit)
+            SELECT e
+            FROM Event e
+            WHERE e.eventState = 'PUBLISHED'
+              AND (:text IS NULL OR LOWER(e.annotation) LIKE LOWER(CONCAT('%', :text, '%'))
+                   OR LOWER(e.description) LIKE LOWER(CONCAT('%', :text, '%')))
+              AND (:paid IS NULL OR e.paid = :paid)
+              AND (:categories IS NULL OR e.category.id IN :categories)
+              AND e.eventDate >= COALESCE(:rangeStart, CURRENT_TIMESTAMP)
+              AND e.eventDate <= COALESCE(:rangeEnd, e.eventDate)
+              AND (:onlyAvailable = false OR e.participantLimit = 0 OR e.confirmedRequests < e.participantLimit)
             """)
     Page<Event> findPublicEvents(@Param("text") String text,
                                  @Param("categories") List<Long> categories,
