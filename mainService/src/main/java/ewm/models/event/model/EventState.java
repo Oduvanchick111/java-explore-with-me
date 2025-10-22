@@ -9,5 +9,4 @@ public enum EventState {
     PENDING("Ожидает рассмотрения"), PUBLISHED("Опубликован"), CANCELED("Отменен пользователем");
 
     private final String state;
-
 }

@@ -53,13 +53,15 @@ public class EventPublicServiceImpl implements EventPublicService {
             throw new ValidateException("rangeStart не может быть позже rangeEnd");
         }
 
+        int pageSize = (size == null || size == 0) ? 10 : size;
+        int pageNumber = from != null ? from / pageSize : 0;
+
         Sort sorting = Sort.by("eventDate");
         if ("VIEWS".equalsIgnoreCase(sort)) {
             sorting = Sort.by(Sort.Direction.DESC, "views");
         }
 
-        int page = from / size;
-        Pageable pageable = PageRequest.of(page, size, sorting);
+        Pageable pageable = PageRequest.of(pageNumber, pageSize, sorting);
 
         Page<Event> eventPage = eventRepo.findPublicEvents(
                 text,
@@ -67,7 +69,7 @@ public class EventPublicServiceImpl implements EventPublicService {
                 paid,
                 rangeStart,
                 rangeEnd,
-                onlyAvailable,
+                onlyAvailable != null ? onlyAvailable : false,
                 pageable
         );
 
