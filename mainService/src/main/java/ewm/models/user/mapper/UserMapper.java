@@ -24,14 +24,12 @@ public class UserMapper {
     }
 
     public UserShortDto toUserShortDto(User user) {
+        if (user == null) {
+            return null;
+        }
         return UserShortDto.builder()
+                .id(user.getId()) 
                 .name(user.getName())
-                .build();
-    }
-
-    public User toUserEntityFromShortDto(UserShortDto userDto) {
-        return User.builder()
-                .name(userDto.getName())
                 .build();
     }
 }
