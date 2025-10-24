@@ -15,23 +15,18 @@ public class AdminCategoriesController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
+    public CategoryDto createCategory(@Valid @RequestBody CategoryDto categoryDto) {
         return adminCategoriesService.createCategory(categoryDto);
     }
 
     @DeleteMapping("/{catId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteCategoryById(@PathVariable Long catId) {
+    public void deleteCategoryById(@PathVariable Long catId) {
         adminCategoriesService.deleteCategoryById(catId);
     }
 
     @PatchMapping("/{catId}")
-    CategoryDto updateCategory(@PathVariable Long catId, @Valid @RequestBody CategoryDto categoryDto) {
+    public CategoryDto updateCategory(@PathVariable Long catId, @Valid @RequestBody CategoryDto categoryDto) {
         return adminCategoriesService.updateCategory(catId, categoryDto);
-    }
-
-    @GetMapping("/test-error")
-    public String testError() {
-        throw new IllegalArgumentException("Test error handling");
     }
 }

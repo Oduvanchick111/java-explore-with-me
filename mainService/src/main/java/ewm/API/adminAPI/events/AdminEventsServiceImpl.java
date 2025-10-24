@@ -4,7 +4,6 @@ import client.StatsClient;
 import dto.ViewStatsDto;
 import ewm.models.participationRequest.model.Status;
 import ewm.models.participationRequest.repo.ParticipationRepo;
-import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
 import ewm.models.category.model.Category;
@@ -16,6 +15,7 @@ import ewm.models.event.model.Event;
 import ewm.models.event.model.EventState;
 import ewm.models.event.model.StateAction;
 import ewm.models.event.repo.EventRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
@@ -26,7 +26,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
 public class AdminEventsServiceImpl implements AdminEventsService {
 
     private final StatsClient statsClient;
@@ -35,6 +36,7 @@ public class AdminEventsServiceImpl implements AdminEventsService {
     private final ParticipationRepo participationRepo;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventResponseDto> getEventsByAdmin(List<Long> users, List<EventState> states, List<Long> categories, LocalDateTime rangeStart, LocalDateTime rangeEnd, int from, int size) {
         Pageable pageable = PageRequest.of(from / size, size);
         Page<Event> events;
@@ -64,7 +66,6 @@ public class AdminEventsServiceImpl implements AdminEventsService {
     }
 
     @Override
-    @Transactional
     public EventResponseDto updateEventByAdmin(Long eventId, UpdateEventRequest updateRequest) {
         Event event = eventRepo.findById(eventId)
                 .orElseThrow(() -> new NotFoundException("Событие с id=" + eventId + " не найдено"));

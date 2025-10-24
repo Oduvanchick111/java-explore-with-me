@@ -2,7 +2,6 @@ package ewm.API.privateAPI.events;
 
 import ewm.models.event.dto.NewEventRequest;
 import jakarta.validation.ValidationException;
-import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
 import ewm.models.category.model.Category;
@@ -16,6 +15,7 @@ import ewm.models.event.model.StateAction;
 import ewm.models.event.repo.EventRepo;
 import ewm.models.user.model.User;
 import ewm.models.user.repo.UserRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
@@ -25,7 +25,8 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
 public class EventPrivateServiceImpl implements EventPrivateService {
 
     private final UserRepo userRepo;
@@ -33,6 +34,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
     private final CategoryRepo categoryRepo;
 
     @Override
+    @Transactional(readOnly = true)
     public List<EventResponseDto> getEventsByUserId(Long userId, int from, int size) {
         User currentUser = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         int page = from / size;
@@ -41,7 +43,6 @@ public class EventPrivateServiceImpl implements EventPrivateService {
     }
 
     @Override
-    @Transactional
     public EventResponseDto createNewEvent(Long userId, NewEventRequest eventRequestDto) {
         User currentUser = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         Category categoryForCurrentEvent = categoryRepo.findById(eventRequestDto.getCategory()).orElseThrow(() -> new NotFoundException("Такой категории не существует"));
@@ -54,6 +55,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public EventResponseDto getUserEventByEventId(Long userId, Long eventId) {
         User currentUser = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));
@@ -63,7 +65,6 @@ public class EventPrivateServiceImpl implements EventPrivateService {
     }
 
     @Override
-    @Transactional
     public EventResponseDto updateEventByEventId(Long userId, Long eventId, UpdateEventRequest updateEventRequest) {
         User currentUser = userRepo.findById(userId)
                 .orElseThrow(() -> new NotFoundException("Пользователь с id=" + userId + " не найден"));

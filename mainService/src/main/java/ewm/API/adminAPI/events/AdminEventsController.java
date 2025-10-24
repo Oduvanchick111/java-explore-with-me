@@ -19,7 +19,7 @@ public class AdminEventsController {
     private final AdminEventsService adminEventsService;
 
     @GetMapping
-    List<EventResponseDto> getEventsByAdmin(@RequestParam(required = false) List<Long> users,
+    public List<EventResponseDto> getEventsByAdmin(@RequestParam(required = false) List<Long> users,
                                             @RequestParam(required = false) List<EventState> states,
                                             @RequestParam(required = false) List<Long> categories,
                                             @RequestParam(required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") LocalDateTime rangeStart,
@@ -30,7 +30,7 @@ public class AdminEventsController {
     }
 
     @PatchMapping("/{eventId}")
-    EventResponseDto updateEventByAdmin(@PathVariable Long eventId, @RequestBody @Valid UpdateEventRequest updateRequest) {
+    public EventResponseDto updateEventByAdmin(@PathVariable Long eventId, @RequestBody @Valid UpdateEventRequest updateRequest) {
         return adminEventsService.updateEventByAdmin(eventId, updateRequest);
     }
 }

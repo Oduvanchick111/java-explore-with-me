@@ -2,8 +2,6 @@ package ewm.API.privateAPI.participationRequests;
 
 import ewm.models.event.model.EventState;
 import ewm.models.participationRequest.dto.ParticipationResponseDto;
-import jakarta.transaction.Transactional;
-import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
 import ewm.models.event.model.Event;
@@ -16,15 +14,18 @@ import ewm.models.participationRequest.model.Status;
 import ewm.models.participationRequest.repo.ParticipationRepo;
 import ewm.models.user.model.User;
 import ewm.models.user.repo.UserRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-@AllArgsConstructor
+@RequiredArgsConstructor
 @Service
+@Transactional
 public class ParticipationRequestPrivateServiceImpl implements ParticipationRequestPrivateService {
 
     private final UserRepo userRepo;
@@ -32,6 +33,7 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
     private final ParticipationRepo participationRepo;
 
     @Override
+    @Transactional(readOnly = true)
     public List<ParticipationResponseDto> getRequestsByEventId(Long userId, Long eventId) {
         User user = checkUser(userId);
         Event event = eventRepo.findEventByUserIdAndEventId(userId, eventId)
@@ -43,7 +45,6 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
     }
 
     @Override
-    @Transactional
     public EventRequestStatusUpdateResult updateRequestStatus(Long userId, Long eventId,
                                                               EventRequestStatusUpdateRequest updateRequest) {
         User user = checkUser(userId);
@@ -65,13 +66,13 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ParticipationResponseDto> getRequestByUserId(Long userId) {
         User user = checkUser(userId);
         return participationRepo.findByRequesterId(userId).stream().map(ParticipationRequestMapper::toParticipationResponseDto).toList();
     }
 
     @Override
-    @Transactional
     public ParticipationResponseDto createParticipationRequest(Long userId, Long eventId) {
         User user = checkUser(userId);
 
@@ -111,7 +112,6 @@ public class ParticipationRequestPrivateServiceImpl implements ParticipationRequ
     }
 
     @Override
-    @Transactional
     public ParticipationResponseDto cancelRequest(Long userId, Long requestId) {
         User requester = checkUser(userId);
 

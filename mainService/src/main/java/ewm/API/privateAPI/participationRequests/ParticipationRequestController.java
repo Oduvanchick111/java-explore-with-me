@@ -18,28 +18,28 @@ public class ParticipationRequestController {
     private final ParticipationRequestPrivateService participationRequestPrivateService;
 
     @GetMapping("/{userId}/events/{eventId}/requests")
-    List<ParticipationResponseDto> getRequestsByEventId(@PathVariable Long userId, @PathVariable Long eventId) {
+    public List<ParticipationResponseDto> getRequestsByEventId(@PathVariable Long userId, @PathVariable Long eventId) {
         return participationRequestPrivateService.getRequestsByEventId(userId, eventId);
     }
 
     @PatchMapping("/{userId}/events/{eventId}/requests")
-    EventRequestStatusUpdateResult updateRequestStatus(@PathVariable Long userId, @PathVariable Long eventId, @Valid @RequestBody EventRequestStatusUpdateRequest updateRequest) {
+    public EventRequestStatusUpdateResult updateRequestStatus(@PathVariable Long userId, @PathVariable Long eventId, @Valid @RequestBody EventRequestStatusUpdateRequest updateRequest) {
         return participationRequestPrivateService.updateRequestStatus(userId, eventId, updateRequest);
     }
 
     @GetMapping("/{userId}/requests")
-    List<ParticipationResponseDto> getRequestByUserId(@PathVariable Long userId) {
+    public List<ParticipationResponseDto> getRequestByUserId(@PathVariable Long userId) {
         return participationRequestPrivateService.getRequestByUserId(userId);
     }
 
     @PostMapping("/{userId}/requests")
     @ResponseStatus(HttpStatus.CREATED)
-    ParticipationResponseDto createParticipationRequest(@PathVariable Long userId, @RequestParam Long eventId) {
+    public ParticipationResponseDto createParticipationRequest(@PathVariable Long userId, @RequestParam Long eventId) {
         return participationRequestPrivateService.createParticipationRequest(userId, eventId);
     }
 
     @PatchMapping("/{userId}/requests/{requestId}/cancel")
-    ParticipationResponseDto cancelRequest(@PathVariable Long userId, @PathVariable Long requestId) {
+    public ParticipationResponseDto cancelRequest(@PathVariable Long userId, @PathVariable Long requestId) {
         return participationRequestPrivateService.cancelRequest(userId, requestId);
     }
 }

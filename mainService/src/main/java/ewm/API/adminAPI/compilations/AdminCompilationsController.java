@@ -18,7 +18,7 @@ public class AdminCompilationsController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    CompilationDto createCompilation(@RequestBody @Valid CompilationCreateDto compilationDto) {
+    public CompilationDto createCompilation(@RequestBody @Valid CompilationCreateDto compilationDto) {
         if (compilationDto == null) {
             throw new ValidateException("Тело запроса не может быть пустым");
         }
@@ -27,12 +27,12 @@ public class AdminCompilationsController {
 
     @DeleteMapping("/{compId}")
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    void deleteCompilation(@PathVariable Long compId) {
+    public void deleteCompilation(@PathVariable Long compId) {
         adminCompilationsService.deleteCompilation(compId);
     }
 
     @PatchMapping("/{compId}")
-    CompilationDto updateCompilation(@PathVariable Long compId, @RequestBody @Valid CompilationUpdateDto updateRequest) {
+    public CompilationDto updateCompilation(@PathVariable Long compId, @RequestBody @Valid CompilationUpdateDto updateRequest) {
         return adminCompilationsService.updateCompilation(compId, updateRequest);
     }
 }

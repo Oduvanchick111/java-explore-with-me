@@ -1,6 +1,5 @@
 package ewm.API.adminAPI.compilations;
 
-import lombok.AllArgsConstructor;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
 import ewm.models.compilation.dto.CompilationCreateDto;
@@ -11,6 +10,7 @@ import ewm.models.compilation.model.Compilation;
 import ewm.models.compilation.repo.CompilationRepo;
 import ewm.models.event.model.Event;
 import ewm.models.event.repo.EventRepo;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -20,13 +20,13 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
+@RequiredArgsConstructor
+@Transactional
 public class AdminCompilationsServiceImpl implements AdminCompilationsService {
     private final CompilationRepo compilationRepo;
     private final EventRepo eventRepo;
 
     @Override
-    @Transactional
     public CompilationDto createCompilation(CompilationCreateDto compilationDto) {
         if (compilationRepo.existsByTitle(compilationDto.getTitle())) {
             throw new ConflictException("Подборка с заголовком '" + compilationDto.getTitle() + "' уже существует");
@@ -53,14 +53,12 @@ public class AdminCompilationsServiceImpl implements AdminCompilationsService {
     }
 
     @Override
-    @Transactional
     public void deleteCompilation(Long compId) {
         Compilation compilation = compilationRepo.findById(compId).orElseThrow(() -> new NotFoundException("Подборка не найдена"));
         compilationRepo.deleteById(compId);
     }
 
     @Override
-    @Transactional
     public CompilationDto updateCompilation(Long compId, CompilationUpdateDto updateRequest) {
         Compilation compilation = compilationRepo.findById(compId)
                 .orElseThrow(() -> new NotFoundException("Подборка с id=" + compId + " не найдена"));
