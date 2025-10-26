@@ -16,24 +16,25 @@ import java.util.Arrays;
 import java.util.List;
 
 @Service
-@SuppressWarnings("unused")
-public class StatsClient {
+public class StatsClient implements ClientBase {
 
     private final RestTemplate restTemplate;
     private final String baseUrl;
     private static final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     private static final DateTimeFormatter DATE_TIME_FORMATTER = DateTimeFormatter.ofPattern(DATE_TIME_FORMAT);
 
-    public StatsClient(@Value("http://localhost:9090") String baseUrl, RestTemplate restTemplate) {
+    public StatsClient(@Value("${stats.service.url}") String baseUrl, RestTemplate restTemplate) {
         this.baseUrl = baseUrl;
         this.restTemplate = restTemplate;
     }
 
+    @Override
     public ResponseEntity<EndpointHitDto> postHit(EndpointHitDto endpointHitDto) {
         String url = baseUrl + "/hit";
         return restTemplate.postForEntity(url, endpointHitDto, EndpointHitDto.class);
     }
 
+    @Override
     public List<ViewStatsDto> getStatistics(LocalDateTime start, LocalDateTime end, List<String> uris, boolean unique) {
         String startStr = start.format(DATE_TIME_FORMATTER);
         String endStr = end.format(DATE_TIME_FORMATTER);

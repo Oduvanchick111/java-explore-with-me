@@ -1,11 +1,11 @@
-package server;
+package ewm;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
-@SpringBootApplication(scanBasePackages = {"server", "gateway", "dto"})
-public class StatApp {
+@SpringBootApplication(scanBasePackages = {"ewm", "client"})
+public class MainApp {
     public static void main(String[] args) {
-        SpringApplication.run(StatApp.class, args);
+        SpringApplication.run(MainApp.class, args);
     }
 }

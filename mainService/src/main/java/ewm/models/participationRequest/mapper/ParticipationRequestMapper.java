@@ -1,0 +1,29 @@
+package ewm.models.participationRequest.mapper;
+
+import ewm.models.participationRequest.dto.ParticipationResponseDto;
+import lombok.experimental.UtilityClass;
+import ewm.models.event.model.Event;
+import ewm.models.participationRequest.dto.ParticipationRequestDto;
+import ewm.models.participationRequest.model.ParticipationRequest;
+import ewm.models.user.model.User;
+
+@UtilityClass
+public class ParticipationRequestMapper {
+
+    public ParticipationRequest toParticipationRequestEntity(ParticipationRequestDto participationRequestDto, User requester, Event event) {
+        return ParticipationRequest.builder()
+                .created(participationRequestDto.getCreated())
+                .status(participationRequestDto.getStatus())
+                .requester(requester)
+                .event(event)
+                .build();
+    }
+
+    public ParticipationResponseDto toParticipationResponseDto(ParticipationRequest participationRequest) {
+        return ParticipationResponseDto.builder()
+                .id(participationRequest.getId())
+                .requester(participationRequest.getRequester().getId())
+                .event(participationRequest.getEvent().getId())
+                .status(participationRequest.getStatus()).build();
+    }
+}

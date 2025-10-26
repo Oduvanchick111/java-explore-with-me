@@ -5,9 +5,10 @@ import dto.ViewStatsDto;
 import dto.endpoint.EndpointHitResponseDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import server.exceptions.ValidateException;
+import org.springframework.web.server.ResponseStatusException;
 import server.mapper.EndpointHitMapper;
 import server.model.EndpointHit;
 import server.repostitory.StatServerRepo;
@@ -41,7 +42,7 @@ public class StateServiceImpl implements StatService {
 
         if (startDate.isAfter(endDate)) {
             log.error("Некорректный временной интервал: начальная дата {} позже конечной {}", startDate, endDate);
-            throw new ValidateException("Дата начала не должна быть позже даты окончания");
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Дата начала не должна быть позже даты окончания");
         }
 
         List<ViewStatsDto> result;
