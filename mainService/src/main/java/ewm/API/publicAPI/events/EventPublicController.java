@@ -1,7 +1,11 @@
 package ewm.API.publicAPI.events;
 
+import ewm.API.publicAPI.comments.PublicCommentsService;
+import ewm.models.comments.dto.CommentResponseDto;
 import ewm.models.event.dto.EventShortResponseDto;
 import jakarta.servlet.http.HttpServletRequest;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
 import lombok.RequiredArgsConstructor;
 import ewm.models.event.dto.EventResponseDto;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -16,6 +20,7 @@ import java.util.List;
 public class EventPublicController {
 
     private final EventPublicService eventPublicService;
+    private final PublicCommentsService publicCommentsService;
 
     @GetMapping
     public List<EventShortResponseDto> getAllEvents(@RequestParam(required = false) String text,
@@ -34,5 +39,13 @@ public class EventPublicController {
     @GetMapping("/{eventId}")
     public EventResponseDto getEventById(@PathVariable Long eventId, HttpServletRequest request) {
         return eventPublicService.getEventById(eventId, request);
+    }
+
+    @GetMapping("/{eventId}/comments")
+    public List<CommentResponseDto> getCommentsForEvent(
+            @PathVariable Long eventId,
+            @RequestParam(defaultValue = "0") @Min(0) Integer from,
+            @RequestParam(defaultValue = "10") @Min(1) @Max(100) Integer size) {
+        return publicCommentsService.getCommentsForEvent(eventId, from, size);
     }
 }
