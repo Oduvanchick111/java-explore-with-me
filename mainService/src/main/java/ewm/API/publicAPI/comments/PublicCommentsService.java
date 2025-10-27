@@ -1,7 +1,6 @@
 package ewm.API.publicAPI.comments;
 
 import ewm.models.comments.dto.CommentResponseDto;
-import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
