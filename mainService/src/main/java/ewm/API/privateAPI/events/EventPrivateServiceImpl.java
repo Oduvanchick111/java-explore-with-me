@@ -117,7 +117,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
     }
 
     private boolean isEventDateValid(LocalDateTime eventDate) {
-        return !eventDate.isBefore(LocalDateTime.now().plusHours(2));
+        return !eventDate.isBefore(LocalDateTime.now().plusMinutes(90));
     }
 
     private void validateEventForUpdate(Event event, UpdateEventRequest updateRequest) {

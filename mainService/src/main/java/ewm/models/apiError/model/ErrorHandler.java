@@ -34,12 +34,6 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleInternalServerError(final Throwable throwable) {
-        return new ErrorResponse("Ошибка сервера", throwable.getMessage());
-    }
-
-    @ExceptionHandler
     @ResponseStatus(HttpStatus.CONFLICT)
     public ErrorResponse handleConflict(final ConflictException exception) {
         return new ErrorResponse("Conflict", exception.getMessage());
@@ -52,5 +46,11 @@ public class ErrorHandler {
                 "BAD_REQUEST",
                 "Отсутствует обязательный параметр: " + exception.getParameterName()
         );
+    }
+
+    @ExceptionHandler(Exception.class)
+    @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
+    public ErrorResponse handleException(final Exception e) {
+        return new ErrorResponse("Ошибка сервера", e.getMessage());
     }
 }
