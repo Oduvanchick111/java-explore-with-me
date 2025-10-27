@@ -56,7 +56,7 @@ public class PublicCommentsServiceImpl implements PublicCommentsService {
         int pageNumber = from / size;
         Pageable pageable = PageRequest.of(pageNumber, size);
         Page<Comment> replies = commentRepo.findByParentId(commentId, pageable);
-        return replies.stream().map(CommentMapper::toResponseDto).toList();
+        return replies.stream().map(CommentMapper::toResponseDtoWithReplies).toList();
     }
 
     @Override

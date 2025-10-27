@@ -8,8 +8,6 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.time.LocalDateTime;
-
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -19,15 +17,9 @@ public class CommentCreateDto {
     @NotNull
     private Long eventId;
 
-    @NotNull
-    private Long userId;
-
     @NotBlank
     @Size(min = 1, max = 5000)
     private String text;
-
-    @Builder.Default
-    private LocalDateTime created = LocalDateTime.now();
 
     private Long parentId;
 }
