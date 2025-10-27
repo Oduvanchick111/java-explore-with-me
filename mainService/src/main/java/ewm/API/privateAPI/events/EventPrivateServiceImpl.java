@@ -1,7 +1,7 @@
 package ewm.API.privateAPI.events;
 
+import ewm.models.apiError.model.ValidateException;
 import ewm.models.event.dto.NewEventRequest;
-import jakarta.validation.ValidationException;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
 import ewm.models.category.model.Category;
@@ -48,7 +48,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         Category categoryForCurrentEvent = categoryRepo.findById(eventRequestDto.getCategory()).orElseThrow(() -> new NotFoundException("Такой категории не существует"));
         Event currentEvent = EventMapper.toEvent(eventRequestDto, currentUser, categoryForCurrentEvent);
         if (!isEventDateValid(currentEvent.getEventDate())) {
-            throw new ValidationException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
+            throw new ValidateException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
         Event savedEvent = eventRepo.save(currentEvent);
         return EventMapper.toEventResponseDto(savedEvent);
@@ -126,7 +126,7 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         }
 
         if (updateRequest.getParticipantLimit() != null && updateRequest.getParticipantLimit() < 0) {
-            throw new ValidationException("Лимит участников не может быть отрицательным");
+            throw new ValidateException("Лимит участников не может быть отрицательным");
         }
 
         if (updateRequest.getEventDate() != null && !isEventDateValid(updateRequest.getEventDate())) {
