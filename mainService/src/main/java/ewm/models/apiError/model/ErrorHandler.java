@@ -48,9 +48,9 @@ public class ErrorHandler {
         );
     }
 
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    public ErrorResponse handleException(final Exception e) {
+    public ErrorResponse handleException(final Throwable e) {
         return new ErrorResponse("Ошибка сервера", e.getMessage());
     }
 }
