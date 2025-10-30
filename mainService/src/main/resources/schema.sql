@@ -50,3 +50,19 @@ CREATE TABLE IF NOT EXISTS compilation_events (
     PRIMARY KEY (compilation_id, event_id)
 );
 
+CREATE TABLE IF NOT EXISTS comments (
+    id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY,
+    event_id BIGINT NOT NULL REFERENCES events(id) ON DELETE CASCADE,
+    user_id BIGINT NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    text TEXT NOT NULL CHECK (length(text) > 0),
+    created TIMESTAMP WITHOUT TIME ZONE NOT NULL,
+    updated TIMESTAMP WITHOUT TIME ZONE,
+    parent_id BIGINT REFERENCES comments(id) ON DELETE CASCADE
+);
+
+CREATE INDEX IF NOT EXISTS idx_comments_event_id ON comments(event_id);
+CREATE INDEX IF NOT EXISTS idx_comments_user_id ON comments(user_id);
+CREATE INDEX IF NOT EXISTS idx_comments_parent_id ON comments(parent_id);
+CREATE INDEX IF NOT EXISTS idx_comments_created ON comments(created);
+CREATE INDEX IF NOT EXISTS idx_comments_event_created ON comments(event_id, created DESC);
+

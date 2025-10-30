@@ -1,7 +1,7 @@
 package ewm.API.privateAPI.events;
 
+import ewm.models.apiError.model.ValidateException;
 import ewm.models.event.dto.NewEventRequest;
-import jakarta.validation.ValidationException;
 import ewm.models.apiError.model.ConflictException;
 import ewm.models.apiError.model.NotFoundException;
 import ewm.models.category.model.Category;
@@ -47,8 +47,8 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         User currentUser = userRepo.findById(userId).orElseThrow(() -> new NotFoundException("Пользователь не найден"));
         Category categoryForCurrentEvent = categoryRepo.findById(eventRequestDto.getCategory()).orElseThrow(() -> new NotFoundException("Такой категории не существует"));
         Event currentEvent = EventMapper.toEvent(eventRequestDto, currentUser, categoryForCurrentEvent);
-        if (!checkDate(currentEvent.getEventDate())) {
-            throw new ValidationException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
+        if (!isEventDateValid(currentEvent.getEventDate())) {
+            throw new ValidateException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
         Event savedEvent = eventRepo.save(currentEvent);
         return EventMapper.toEventResponseDto(savedEvent);
@@ -116,8 +116,8 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         return EventMapper.toEventResponseDto(updatedEvent);
     }
 
-    private Boolean checkDate(LocalDateTime eventDate) {
-        return eventDate.isBefore(LocalDateTime.now().plusHours(2));
+    private boolean isEventDateValid(LocalDateTime eventDate) {
+        return !eventDate.isBefore(LocalDateTime.now().plusMinutes(90));
     }
 
     private void validateEventForUpdate(Event event, UpdateEventRequest updateRequest) {
@@ -126,10 +126,10 @@ public class EventPrivateServiceImpl implements EventPrivateService {
         }
 
         if (updateRequest.getParticipantLimit() != null && updateRequest.getParticipantLimit() < 0) {
-            throw new ValidationException("Лимит участников не может быть отрицательным");
+            throw new ValidateException("Лимит участников не может быть отрицательным");
         }
 
-        if (updateRequest.getEventDate() != null && !checkDate(updateRequest.getEventDate())) {
+        if (updateRequest.getEventDate() != null && !isEventDateValid(updateRequest.getEventDate())) {
             throw new ConflictException("Дата проведения события должна быть не ранее, чем за два часа до текущего момента");
         }
     }
